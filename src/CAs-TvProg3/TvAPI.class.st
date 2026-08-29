@@ -127,6 +127,15 @@ TvAPI >> start [
 	.teapot start
 ]
 
+{ #category : 'as yet unclassified' }
+TvAPI >> status [
+
+	| raw |
+	self halt.
+	raw := 'Up and running'.
+	^ raw
+]
+
 { #category : 'accessing' }
 TvAPI >> stop [
 
