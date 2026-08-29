@@ -34,7 +34,7 @@ TmdbClient >> client [
 TmdbClient >> tvDetails: series_id [
 
 	|  raw flds dict |
-	raw := self tvDetails: series_id.
+	raw := self tvDetails_raw: series_id.
 	flds := { #id. #name.#tagline }.
 	dict := Dictionary new.
 	flds do:[:fld|dict a.fld put:(raw at:fld)].
