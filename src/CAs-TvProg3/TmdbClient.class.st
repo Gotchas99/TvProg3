@@ -32,13 +32,15 @@ TmdbClient >> client [
 
 { #category : 'as yet unclassified' }
 TmdbClient >> tvDetails: series_id [
-
+"ideas for more fields: genres (list),seasons (with episode count)) "
 	| raw flds dict |
 	raw := self tvDetails_raw: series_id.
-	flds := { #id. #name. #tagline }.
+	flds := { #id. #name. #tagline. #overview. .#status. #vote_average. #number_of_seasons. #number_of_episodes. }.
 	dict := Dictionary new.
 	flds do: [ :fld | dict at: fld put: (raw at: fld) ].
-	dict at:#poster_path put:( 'https://image.tmdb.org/t/p/w92',(raw at:#poster_path)).
+	dict
+		at: #poster_path
+		put: 'https://image.tmdb.org/t/p/w92' , (raw at: #poster_path).
 	^ dict
 ]
 
