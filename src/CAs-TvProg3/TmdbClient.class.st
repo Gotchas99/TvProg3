@@ -33,12 +33,13 @@ TmdbClient >> client [
 { #category : 'as yet unclassified' }
 TmdbClient >> tvDetails: series_id [
 
-	|  raw flds dict |
+	| raw flds dict |
 	raw := self tvDetails_raw: series_id.
-	flds := { #id. #name.#tagline }.
+	flds := { #id. #name. #tagline }.
 	dict := Dictionary new.
-	flds do:[:fld|dict a.fld put:(raw at:fld)].
-	^dict
+	flds do: [ :fld | dict at: fld put: (raw at: fld) ].
+	dict at:#poster_path put:( 'https://image.tmdb.org/t/p/w92',(raw at:#poster_path)).
+	^ dict
 ]
 
 { #category : 'as yet unclassified' }
