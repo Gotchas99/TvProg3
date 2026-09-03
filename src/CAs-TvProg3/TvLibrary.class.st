@@ -1,6 +1,9 @@
 Class {
 	#name : 'TvLibrary',
 	#superclass : 'Object',
+	#instVars : [
+		'programs'
+	],
 	#classVars : [
 		'Default'
 	],
@@ -19,4 +22,15 @@ TvLibrary class >> default [
 TvLibrary class >> reset [
 
  Default :=nil
+]
+
+{ #category : 'as yet unclassified' }
+TvLibrary >> allPrograms [
+
+	^programs
+]
+
+{ #category : 'as yet unclassified' }
+TvLibrary >> initialize [ 
+programs := OrderedCollection new.
 ]
