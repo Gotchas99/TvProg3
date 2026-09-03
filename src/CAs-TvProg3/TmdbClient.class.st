@@ -5,8 +5,9 @@ Class {
 		'ApiKey',
 		'Token'
 	],
-	#category : 'CAs-TvProg3',
-	#package : 'CAs-TvProg3'
+	#category : 'CAs-TvProg3-API',
+	#package : 'CAs-TvProg3',
+	#tag : 'API'
 }
 
 { #category : 'accessing' }
