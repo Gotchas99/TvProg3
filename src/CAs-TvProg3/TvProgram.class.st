@@ -6,7 +6,8 @@ Class {
 		'imdbId',
 		'seasons',
 		'tmdbJson',
-		'omdbJson'
+		'omdbJson',
+		'name'
 	],
 	#category : 'CAs-TvProg3-Core',
 	#package : 'CAs-TvProg3',
@@ -52,22 +53,30 @@ TvProgram >> parseOmdb [
 
 { #category : 'accessing' }
 TvProgram >> parseTmdb [
+
+	name:= tmdbJson at:#name.
 ]
 
 { #category : 'accessing' }
 TvProgram >> retrieveOmdb [
 
-	self assert: imdbId notNil 
+	| cl |
+	self assert: imdbId notNil.
+	cl := OmdbClient new.
+	omdbJson := cl tvDetails: imdbId .
+	self parseOmdb.
 ]
 
 { #category : 'accessing' }
 TvProgram >> retrieveTmdb [
 
-	| cl |
+	| cl extIDs |
 	self assert: tmdbId notNil.
 	cl := TmdbClient new.
 	tmdbJson := cl tvDetails: tmdbId.
-	self parseTmdb
+	self parseTmdb.
+	extIDs := cl tv_external_ids: tmdbId.
+	imdbId := extIDs at:#imdb_id.
 ]
 
 { #category : 'accessing' }
@@ -80,5 +89,5 @@ TvProgram >> tmdbId [
 { #category : 'accessing' }
 TvProgram >> tmdbId: aTmdbID [
 
-	tmdbId := aTmdbID
+	tmdbId := aTmdbID asString
 ]

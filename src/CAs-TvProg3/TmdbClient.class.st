@@ -32,6 +32,28 @@ TmdbClient >> client [
 ]
 
 { #category : 'as yet unclassified' }
+TmdbClient >> external_ids: aTmdbId [
+
+	| cl |
+	cl := self client
+		      addPath: #tv;
+		      addPath: aTmdbId asString.
+	cl get.
+	^ cl contents
+]
+
+{ #category : 'as yet unclassified' }
+TmdbClient >> movie_external_ids: aTmdbId [
+
+	| cl |
+	cl := self client
+		      addPath: #movie;
+		      addPath: aTmdbId asString.
+	cl get.
+	^ cl contents
+]
+
+{ #category : 'as yet unclassified' }
 TmdbClient >> tvDetails: series_id [
 	"ideas for more fields: genres (list),seasons (with episode count)) "
 
@@ -54,6 +76,19 @@ TmdbClient >> tvDetails_raw: series_id [
 	cl := self client
 		      addPath: #tv;
 		      addPath: series_id asString.
+	cl get.
+	^ cl contents
+]
+
+{ #category : 'as yet unclassified' }
+TmdbClient >> tv_external_ids: aTmdbId [
+	"https://api.themoviedb.org/3/tv/{series_id}/external_ids"
+
+	| cl |
+	cl := self client
+		      addPath: #tv;
+		      addPath: aTmdbId asString;
+		      addPath: #external_ids.
 	cl get.
 	^ cl contents
 ]
