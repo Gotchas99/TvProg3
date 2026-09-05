@@ -35,7 +35,7 @@ http://www.omdbapi.com/?i=tt3896198&apikey=xxxxxxxx"
 ]
 
 { #category : 'as yet unclassified' }
-OmdbClient >> tvDetails: series_id [
+OmdbClient >> tv_details: series_id [
 	"ideas for more fields: genres (list),seasons (with episode count)) "
 
 	| raw  cl |

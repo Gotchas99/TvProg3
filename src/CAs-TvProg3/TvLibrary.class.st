@@ -24,10 +24,23 @@ TvLibrary class >> reset [
  Default :=nil
 ]
 
+{ #category : 'adding' }
+TvLibrary >> addProgram: aProgram [
+
+(self at: aProgram tmdbId )ifNil: [
+	programs add: aProgram]
+]
+
 { #category : 'as yet unclassified' }
 TvLibrary >> allPrograms [
 
 	^programs
+]
+
+{ #category : 'adding' }
+TvLibrary >> at: aTmdbId [
+
+	^programs detect: [ :p | p tmdbId = aTmdbId asString] ifNone: [ nil ]
 ]
 
 { #category : 'as yet unclassified' }

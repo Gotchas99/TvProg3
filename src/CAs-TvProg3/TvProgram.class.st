@@ -7,7 +7,8 @@ Class {
 		'seasons',
 		'tmdbJson',
 		'omdbJson',
-		'name'
+		'name',
+		'type'
 	],
 	#category : 'CAs-TvProg3-Core',
 	#package : 'CAs-TvProg3',
@@ -47,47 +48,72 @@ TvProgram >> name [
 ^tmdbJson at:#name
 ]
 
-{ #category : 'accessing' }
+{ #category : 'parsing' }
 TvProgram >> parseOmdb [
 ]
 
-{ #category : 'accessing' }
+{ #category : 'parsing' }
 TvProgram >> parseTmdb [
 
 	name:= tmdbJson at:#name.
 ]
 
-{ #category : 'accessing' }
+{ #category : 'printing' }
+TvProgram >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream
+		nextPut: $(;
+		nextPutAll: name;
+		nextPut: $)
+]
+
+{ #category : 'retrieve' }
 TvProgram >> retrieveOmdb [
 
 	| cl |
 	self assert: imdbId notNil.
+	self assert: type notNil.
 	cl := OmdbClient new.
-	omdbJson := cl tvDetails: imdbId .
-	self parseOmdb.
+	omdbJson := cl tv_details: imdbId.
+	self parseOmdb
 ]
 
-{ #category : 'accessing' }
+{ #category : 'retrieve' }
 TvProgram >> retrieveTmdb [
 
 	| cl extIDs |
 	self assert: tmdbId notNil.
+	self assert: type notNil.
 	cl := TmdbClient new.
-	tmdbJson := cl tvDetails: tmdbId.
+	tmdbJson := type = #tv 
+		            ifTrue: [ cl tv_details: tmdbId ]
+		            ifFalse: [ cl movie_details: tmdbId ].
 	self parseTmdb.
-	extIDs := cl tv_external_ids: tmdbId.
-	imdbId := extIDs at:#imdb_id.
+	extIDs := type = #tv
+		          ifTrue: [ cl tv_external_ids: tmdbId ]
+		          ifFalse: [ cl movie_external_ids: tmdbId ].
+	imdbId := extIDs at: #imdb_id
 ]
 
 { #category : 'accessing' }
 TvProgram >> tmdbId [
-^
-
-	tmdbId 
+ 
+	^ tmdbId
 ]
 
 { #category : 'accessing' }
 TvProgram >> tmdbId: aTmdbID [
 
 	tmdbId := aTmdbID asString
+]
+
+{ #category : 'accessing' }
+TvProgram >> type [ ^type
+]
+
+{ #category : 'accessing' }
+TvProgram >> type: aType [
+
+	 type:=aType
 ]

@@ -32,20 +32,14 @@ TmdbClient >> client [
 ]
 
 { #category : 'as yet unclassified' }
-TmdbClient >> external_ids: aTmdbId [
-
-	| cl |
-	cl := self client
-		      addPath: #tv;
-		      addPath: aTmdbId asString.
-	cl get.
-	^ cl contents
+TmdbClient >> movie_details: tmdbId [
 ]
 
 { #category : 'as yet unclassified' }
 TmdbClient >> movie_external_ids: aTmdbId [
 
 	| cl |
+self flag:'behövs troligen inte. imdb finns i details'.
 	cl := self client
 		      addPath: #movie;
 		      addPath: aTmdbId asString.
@@ -54,11 +48,11 @@ TmdbClient >> movie_external_ids: aTmdbId [
 ]
 
 { #category : 'as yet unclassified' }
-TmdbClient >> tvDetails: series_id [
+TmdbClient >> tv_details: series_id [
 	"ideas for more fields: genres (list),seasons (with episode count)) "
 
 	| raw flds dict |
-	raw := self tvDetails_raw: series_id.
+	raw := self tv_details_raw: series_id.
 	flds := { #id. #name. #tagline. #overview. #status. #vote_average.
 	        #number_of_seasons. #number_of_episodes }.
 	dict := Dictionary new.
@@ -70,7 +64,7 @@ TmdbClient >> tvDetails: series_id [
 ]
 
 { #category : 'as yet unclassified' }
-TmdbClient >> tvDetails_raw: series_id [
+TmdbClient >> tv_details_raw: series_id [
 
 	| cl |
 	cl := self client
@@ -82,13 +76,11 @@ TmdbClient >> tvDetails_raw: series_id [
 
 { #category : 'as yet unclassified' }
 TmdbClient >> tv_external_ids: aTmdbId [
-	"https://api.themoviedb.org/3/tv/{series_id}/external_ids"
 
 	| cl |
 	cl := self client
 		      addPath: #tv;
-		      addPath: aTmdbId asString;
-		      addPath: #external_ids.
+		      addPath: aTmdbId asString.
 	cl get.
 	^ cl contents
 ]

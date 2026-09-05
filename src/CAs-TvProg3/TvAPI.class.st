@@ -92,7 +92,8 @@ TvAPI >> showNames [
 	res := Dictionary new.
 	res at: #status put: 'ok'.
 	showIDs := { 1408. 5920. 63174 }.
-	programs := showIDs collect: [ :id | TmdbClient new tvDetails: id ].
+	programs := showIDs collect: [ :id | TmdbClient new tv_details: id ].
+	TvLibrary default allPrograms.
 	res at: #programs put: programs.
 	^ res
 ]
