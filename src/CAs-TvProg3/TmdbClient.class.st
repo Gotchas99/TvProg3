@@ -33,6 +33,13 @@ TmdbClient >> client [
 
 { #category : 'as yet unclassified' }
 TmdbClient >> movie_details: tmdbId [
+
+		| cl |
+	cl := self client
+		      addPath: #tv;
+		      addPath: tmdbId asString.
+	cl get.
+	^ cl contents
 ]
 
 { #category : 'as yet unclassified' }
@@ -49,6 +56,17 @@ self flag:'behövs troligen inte. imdb finns i details'.
 
 { #category : 'as yet unclassified' }
 TmdbClient >> tv_details: series_id [
+
+	| cl |
+	cl := self client
+		      addPath: #tv;
+		      addPath: series_id asString.
+	cl get.
+	^ cl contents
+]
+
+{ #category : 'as yet unclassified' }
+TmdbClient >> tv_details_old: series_id [
 	"ideas for more fields: genres (list),seasons (with episode count)) "
 
 	| raw flds dict |
@@ -61,17 +79,6 @@ TmdbClient >> tv_details: series_id [
 		at: #poster_thumbnail
 		put: 'https://image.tmdb.org/t/p/w92' , (raw at: #poster_path).
 	^ dict
-]
-
-{ #category : 'as yet unclassified' }
-TmdbClient >> tv_details_raw: series_id [
-
-	| cl |
-	cl := self client
-		      addPath: #tv;
-		      addPath: series_id asString.
-	cl get.
-	^ cl contents
 ]
 
 { #category : 'as yet unclassified' }

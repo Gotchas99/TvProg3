@@ -16,6 +16,13 @@ Class {
 }
 
 { #category : 'accessing' }
+TvProgram >> at: aFldName [
+
+	| res |
+	res:= tmdbJson at:aFldName ifAbsent: [ omdbJson at:aFldName ].^res
+]
+
+{ #category : 'accessing' }
 TvProgram >> id [ 
 ^tmdbId 
 ]
@@ -86,14 +93,15 @@ TvProgram >> retrieveTmdb [
 	self assert: tmdbId notNil.
 	self assert: type notNil.
 	cl := TmdbClient new.
-	tmdbJson := type = #tv 
+	tmdbJson := type = #tv
 		            ifTrue: [ cl tv_details: tmdbId ]
 		            ifFalse: [ cl movie_details: tmdbId ].
 	self parseTmdb.
-	extIDs := type = #tv
-		          ifTrue: [ cl tv_external_ids: tmdbId ]
-		          ifFalse: [ cl movie_external_ids: tmdbId ].
-	imdbId := extIDs at: #imdb_id
+	type = #tv
+		ifTrue: [
+			extIDs :=	cl tv_external_ids: tmdbId.
+				imdbId := extIDs at: #imdb_id ]
+		ifFalse: [ imdbId := tmdbJson at: #imdb_id ]
 ]
 
 { #category : 'accessing' }

@@ -86,14 +86,30 @@ TvAPI >> cors: req [
 ]
 
 { #category : 'as yet unclassified' }
+TvAPI >> packageProgram: aProgram [
+	"ideas for more fields: genres (list),seasons (with episode count)) "
+
+	|  flds dict |
+	flds := { #id. #name. #tagline. #overview. #status. #vote_average.
+	        #number_of_seasons. #number_of_episodes }.
+	dict := Dictionary new.
+	flds do: [ :fld | dict at: fld put: (aProgram at: fld) ].
+	dict
+		at: #poster_thumbnail
+		put: 'https://image.tmdb.org/t/p/w92' , (aProgram at: #poster_path).
+	^ dict
+]
+
+{ #category : 'as yet unclassified' }
 TvAPI >> showNames [
 
-	| res showIDs programs |
+	| res showIDs programs allProgs |
 	res := Dictionary new.
 	res at: #status put: 'ok'.
-	showIDs := { 1408. 5920. 63174 }.
-	programs := showIDs collect: [ :id | TmdbClient new tv_details: id ].
-	TvLibrary default allPrograms.
+	"showIDs := { 1408. 5920. 63174 }."
+"	programs := showIDs collect: [ :id | TmdbClient new tv_details: id ]."
+allProgs:=	TvLibrary default allPrograms.
+	programs:= allProgs collect:[:p|self packageProgram: p].
 	res at: #programs put: programs.
 	^ res
 ]
@@ -172,8 +188,11 @@ TvAPI >> start [
 				resp headers at: 'Access-Control-Allow-Origin' put: '*' ];
 		OPTIONS: '*' -> [ :req | self cors: req ];
 		GET: '/' -> 'asd';
-		GET: '/shows' ->  [ :req | self showNames ]
-		"serveStatic: '/statics' from: TuLibrary default postPath;
+		GET: '/shows'
+			-> [ :req | 
+				self showNames ].
+	teapot start.
+	"serveStatic: '/statics' from: TuLibrary default postPath;
 		GET: '/tags' -> [ :req | TuLibrary default tags ];
 		GET: '/posts' -> [ :req |
 				TuLibrary default
@@ -188,10 +207,8 @@ TvAPI >> start [
 				TuLibrary default
 					updateContentInPost: (req at: #post_id)
 					id: (req at: #id)
-					with: req ]."
-	"before:
+					with: req ]." "before:
 			'*' -> [ :req | self traceCr: 'Teapot: ' , req uri asString ];"
-	.teapot start
 ]
 
 { #category : 'as yet unclassified' }
