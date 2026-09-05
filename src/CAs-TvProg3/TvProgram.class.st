@@ -8,7 +8,8 @@ Class {
 		'omdbJson',
 		'name',
 		'type',
-		'seasons'
+		'seasons',
+		'interest'
 	],
 	#category : 'CAs-TvProg3-Core',
 	#package : 'CAs-TvProg3',
@@ -47,7 +48,14 @@ TvProgram >> imdbId: aImdbID [
 { #category : 'initialization' }
 TvProgram >> initialize [
 
-	seasons:= OrderedCollection new.
+	seasons := OrderedCollection new.
+	interest:=#new
+]
+
+{ #category : 'accessing' }
+TvProgram >> interest [
+
+	^ interest ifNil:[interest:=#new]
 ]
 
 { #category : 'accessing' }
@@ -62,7 +70,13 @@ TvProgram >> parseOmdb [
 { #category : 'parsing' }
 TvProgram >> parseTmdb [
 
-	name:= tmdbJson at:#name.
+	name := tmdbJson at: #name.
+	seasons := (tmdbJson at: #seasons) collect: [ :s |
+			           TvSeason new
+				           program: self;
+				           tmdbJson: s; 
+				           tmdbId: (s at: #id);
+				           season_number: (s at: #season_number) ]
 ]
 
 { #category : 'printing' }
