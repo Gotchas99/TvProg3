@@ -87,7 +87,8 @@ TmdbClient >> tv_external_ids: aTmdbId [
 	| cl |
 	cl := self client
 		      addPath: #tv;
-		      addPath: aTmdbId asString.
+		      addPath: aTmdbId asString;
+		addPath:#external_ids.
 	cl get.
 	^ cl contents
 ]

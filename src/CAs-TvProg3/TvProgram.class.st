@@ -69,10 +69,7 @@ TvProgram >> parseTmdb [
 TvProgram >> printOn: aStream [
 
 	super printOn: aStream.
-	aStream
-		nextPut: $(;
-		nextPutAll: name;
-		nextPut: $)
+	aStream << '(' << type << ':' << tmdbId << '* ' << name << ')' 
 ]
 
 { #category : 'retrieve' }
