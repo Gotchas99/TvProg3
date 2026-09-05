@@ -9,7 +9,8 @@ Class {
 		'name',
 		'type',
 		'seasons',
-		'interest'
+		'interest',
+		'viewStatus'
 	],
 	#category : 'CAs-TvProg3-Core',
 	#package : 'CAs-TvProg3',
@@ -135,4 +136,10 @@ TvProgram >> type [ ^type
 TvProgram >> type: aType [
 
 	 type:=aType
+]
+
+{ #category : 'accessing' }
+TvProgram >> viewStatus [
+self flag:'ska beräknas från säsonger'.
+	^ viewStatus ifNil: [ viewStatus := #new ]
 ]

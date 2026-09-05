@@ -5,7 +5,8 @@ Class {
 		'tmdbId',
 		'program',
 		'season_number',
-		'tmdbJson'
+		'tmdbJson',
+		'viewStatus'
 	],
 	#category : 'CAs-TvProg3-Core',
 	#package : 'CAs-TvProg3',
@@ -42,4 +43,9 @@ TvSeason >> tmdbId: anId [
 { #category : 'accessing' }
 TvSeason >> tmdbJson: aJsonDictionary [
 tmdbJson := aJsonDictionary 
+]
+
+{ #category : 'accessing' }
+TvSeason >> viewStatus [ 
+^viewStatus ifNil: [ viewStatus:=#new ]
 ]
