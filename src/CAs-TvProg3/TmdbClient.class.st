@@ -92,3 +92,25 @@ TmdbClient >> tv_external_ids: aTmdbId [
 	cl get.
 	^ cl contents
 ]
+
+{ #category : 'as yet unclassified' }
+TmdbClient >> unavailable_providers [
+
+	^ #( 'Amazon Prime Video' 'Viaplay' )
+]
+
+{ #category : 'as yet unclassified' }
+TmdbClient >> watch_providers: aTmdbId [
+
+	| cl countries swedish providers names |
+	cl := self client
+		      addPath: #tv;
+		      addPath: aTmdbId asString;
+		      addPath: 'watch/providers'.
+	cl get.
+	countries := cl contents at: #results.
+	swedish := countries at: #SE.
+	providers := swedish at: #flatrate.
+	names := providers collect: [ :p | p at: #provider_name ].
+	^ names  \ self unavailable_providers 
+]
