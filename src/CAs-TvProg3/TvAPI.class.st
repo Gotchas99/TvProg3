@@ -89,8 +89,8 @@ TvAPI >> cors: req [
 TvAPI >> packageProgram: aProgram [
 	"ideas for more fields: genres (list),seasons (with episode count)) "
 
-	|  flds dict |
-	flds := { #id. #name. #tagline. #overview. #status. #vote_average.
+	| flds dict |
+	flds := { #id. #name. #tagline. #overview. #status. #vote_average. #imdbRating.
 	        #number_of_seasons. #number_of_episodes }.
 	dict := Dictionary new.
 	flds do: [ :fld | dict at: fld put: (aProgram at: fld) ].
@@ -103,13 +103,13 @@ TvAPI >> packageProgram: aProgram [
 { #category : 'as yet unclassified' }
 TvAPI >> showNames [
 
-	| res showIDs programs allProgs |
+	| res programs allProgs |
 	res := Dictionary new.
 	res at: #status put: 'ok'.
 	"showIDs := { 1408. 5920. 63174 }."
-"	programs := showIDs collect: [ :id | TmdbClient new tv_details: id ]."
-allProgs:=	TvLibrary default allPrograms.
-	programs:= allProgs collect:[:p|self packageProgram: p].
+	"	programs := showIDs collect: [ :id | TmdbClient new tv_details: id ]."
+	allProgs := TvLibrary default allPrograms.
+	programs := allProgs collect: [ :p | self packageProgram: p ].
 	res at: #programs put: programs.
 	^ res
 ]
