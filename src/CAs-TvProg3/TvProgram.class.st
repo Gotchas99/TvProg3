@@ -4,11 +4,11 @@ Class {
 	#instVars : [
 		'tmdbId',
 		'imdbId',
-		'seasons',
 		'tmdbJson',
 		'omdbJson',
 		'name',
-		'type'
+		'type',
+		'seasons'
 	],
 	#category : 'CAs-TvProg3-Core',
 	#package : 'CAs-TvProg3',

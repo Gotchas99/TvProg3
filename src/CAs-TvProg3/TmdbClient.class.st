@@ -32,6 +32,31 @@ TmdbClient >> client [
 ]
 
 { #category : 'as yet unclassified' }
+TmdbClient >> find_by_id: anImdbId [
+	"curl --request GET \
+     --url 'https://api.themoviedb.org/3/find/external_id?external_source=imdb_id&language=en-US'"
+
+	| cl tv movies res all |
+	cl := self client
+		      addPath: #find;
+		      addPath: anImdbId asString.
+	cl queryAt: 'external_source' put: 'imdb_id'.
+	cl get.
+	res := cl contents.
+	tv := (res at: #tv_results) collect: [ :show |
+			      TvProgram new
+				      type: #tv;
+				      tmdbId: (show at: #id) ].
+	movies := (res at: #movie_results) collect: [ :show |
+			          TvProgram new
+				          type: #movie;
+				          tmdbId: (show at: #id) ].
+			all:=tv,movies.
+			all do:[:p|p retrieveTmdb ;retrieveOmdb ].
+	^ all
+]
+
+{ #category : 'as yet unclassified' }
 TmdbClient >> movie_details: tmdbId [
 
 		| cl |
