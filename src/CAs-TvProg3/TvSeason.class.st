@@ -16,13 +16,18 @@ Class {
 { #category : 'converting' }
 TvSeason >> asDict [
 
-| dict |
-dict:=Dictionary new.
-dict at: #season_number put: (tmdbJson at:#season_number);
- at: #id put: (tmdbJson at:#id); at: #overview put: (tmdbJson at:#overview);
- at: #poster_path put: (tmdbJson at:#poster_path); at: #name  put: (tmdbJson at:#name); at: #viewStatus  put: (tmdbJson at:#viewStatus).
+	| dict |
+	dict := Dictionary new.
+	dict
+		at: #id put: (tmdbJson at: #id);
+		at: #season_number put: (tmdbJson at: #season_number);
+		at: #name put: (tmdbJson at: #name);
+		at: #overview put: (tmdbJson at: #overview);
+		at: #poster_path put: (tmdbJson at: #poster_path);
+		at: #vote_average put: (tmdbJson at: #vote_average);
+		at: #viewStatus put: (tmdbJson at: #viewStatus).
 
-^dict	
+	^ dict
 ]
 
 { #category : 'accessing' }
