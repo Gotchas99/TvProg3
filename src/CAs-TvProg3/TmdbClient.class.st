@@ -119,6 +119,19 @@ TmdbClient >> tv_external_ids: aTmdbId [
 ]
 
 { #category : 'as yet unclassified' }
+TmdbClient >> tv_season: series_id season:aSeasonNo [
+"https://api.themoviedb.org/3/tv/{series_id}/season/{season_number}"
+	| cl |
+	cl := self client
+		      addPath: #tv;
+		      addPath: series_id asString;
+		addPath:'season';
+		addPath:aSeasonNo asString.
+	cl get.
+	^ cl contents
+]
+
+{ #category : 'as yet unclassified' }
 TmdbClient >> unavailable_providers [
 
 	^ #( 'Amazon Prime Video' 'Viaplay' )

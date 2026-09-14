@@ -100,6 +100,16 @@ TvAPI >> packageProgram: aProgram [
 	^ dict
 ]
 
+{ #category : 'accessing' }
+TvAPI >> seasons: anID [
+
+	| program seasons tmp |
+	program := TvLibrary default at: anID asString.
+	seasons := Dictionary new.
+	tmp:=program seasons collect: [ :s | s asDict ].
+	^ tmp
+]
+
 { #category : 'as yet unclassified' }
 TvAPI >> showNames [
 

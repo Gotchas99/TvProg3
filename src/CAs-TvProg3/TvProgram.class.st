@@ -10,7 +10,8 @@ Class {
 		'type',
 		'seasons',
 		'interest',
-		'viewStatus'
+		'viewStatus',
+		'tmdbJsonSeasons'
 	],
 	#category : 'CAs-TvProg3-Core',
 	#package : 'CAs-TvProg3',
@@ -62,6 +63,12 @@ TvProgram >> interest [
 { #category : 'accessing' }
 TvProgram >> name [
 ^tmdbJson at:#name
+]
+
+{ #category : 'accessing' }
+TvProgram >> number_of_seasons [
+
+	^ tmdbJson at:#number_of_seasons
 ]
 
 { #category : 'parsing' }
@@ -117,7 +124,11 @@ TvProgram >> retrieveTmdb [
 ]
 
 { #category : 'accessing' }
-TvProgram >> seasons:anID [
+TvProgram >> seasons [
+
+	self assert: type = #tv.
+
+	^ seasons
 ]
 
 { #category : 'accessing' }

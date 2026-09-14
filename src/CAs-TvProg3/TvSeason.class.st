@@ -13,6 +13,18 @@ Class {
 	#tag : 'Core'
 }
 
+{ #category : 'converting' }
+TvSeason >> asDict [
+
+| dict |
+dict:=Dictionary new.
+dict at: #season_number put: (tmdbJson at:#season_number);
+ at: #id put: (tmdbJson at:#id); at: #overview put: (tmdbJson at:#overview);
+ at: #poster_path put: (tmdbJson at:#poster_path); at: #name  put: (tmdbJson at:#name); at: #viewStatus  put: (tmdbJson at:#viewStatus).
+
+^dict	
+]
+
 { #category : 'accessing' }
 TvSeason >> name [ 
 ^tmdbJson at:#name
