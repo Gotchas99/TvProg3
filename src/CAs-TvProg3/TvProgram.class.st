@@ -117,6 +117,10 @@ TvProgram >> retrieveTmdb [
 ]
 
 { #category : 'accessing' }
+TvProgram >> seasons:anID [
+]
+
+{ #category : 'accessing' }
 TvProgram >> tmdbId [
  
 	^ tmdbId

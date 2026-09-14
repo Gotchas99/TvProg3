@@ -188,10 +188,9 @@ TvAPI >> start [
 				resp headers at: 'Access-Control-Allow-Origin' put: '*' ];
 		OPTIONS: '*' -> [ :req | self cors: req ];
 		GET: '/' -> 'asd';
-		GET: '/shows'
-			-> [ :req | 
-				self showNames ].
-	teapot start.
+		GET: '/shows' -> [ :req | self showNames ];
+				GET: '/seasons' -> [ :req | self seasons: (req at: #id) ].
+	teapot start
 	"serveStatic: '/statics' from: TuLibrary default postPath;
 		GET: '/tags' -> [ :req | TuLibrary default tags ];
 		GET: '/posts' -> [ :req |
