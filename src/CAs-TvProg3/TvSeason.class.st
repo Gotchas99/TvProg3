@@ -6,7 +6,8 @@ Class {
 		'program',
 		'season_number',
 		'tmdbJson',
-		'viewStatus'
+		'viewStatus',
+		'watchProviders'
 	],
 	#category : 'CAs-TvProg3-Core',
 	#package : 'CAs-TvProg3',
@@ -25,7 +26,9 @@ TvSeason >> asDict [
 		at: #overview put: (tmdbJson at: #overview);
 		at: #poster_path put: (tmdbJson at: #poster_path);
 		at: #vote_average put: (tmdbJson at: #vote_average);
-		at: #viewStatus put: (tmdbJson at: #viewStatus).
+		at: #viewStatus put: viewStatus;
+		at:watchProviders put: watchProviders.
+		
 
 	^ dict
 ]
@@ -47,6 +50,12 @@ program := aTvProgram
 ]
 
 { #category : 'accessing' }
+TvSeason >> season_number [
+^
+	season_number 
+]
+
+{ #category : 'accessing' }
 TvSeason >> season_number:aNumber [ 
 season_number := aNumber 
 ]
@@ -65,4 +74,9 @@ tmdbJson := aJsonDictionary
 { #category : 'accessing' }
 TvSeason >> viewStatus [ 
 ^viewStatus ifNil: [ viewStatus:=#new ]
+]
+
+{ #category : 'as yet unclassified' }
+TvSeason >> watch_providers: aList [
+watchProviders := aList 
 ]

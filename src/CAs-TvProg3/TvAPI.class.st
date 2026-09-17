@@ -100,6 +100,20 @@ TvAPI >> packageProgram: aProgram [
 	^ dict
 ]
 
+{ #category : 'as yet unclassified' }
+TvAPI >> programs [
+
+	| res programs allProgs |
+	res := Dictionary new.
+	res at: #status put: 'ok'.
+	"showIDs := { 1408. 5920. 63174 }."
+	"	programs := showIDs collect: [ :id | TmdbClient new tv_details: id ]."
+	allProgs := TvLibrary default allPrograms.
+	programs := allProgs collect: [ :p | self packageProgram: p ].
+	res at: #programs put: programs.
+	^ res
+]
+
 { #category : 'accessing' }
 TvAPI >> seasons: anID [
 
@@ -113,23 +127,17 @@ TvAPI >> seasons: anID [
 { #category : 'as yet unclassified' }
 TvAPI >> showNames [
 
-	| res programs allProgs |
-	res := Dictionary new.
-	res at: #status put: 'ok'.
-	"showIDs := { 1408. 5920. 63174 }."
-	"	programs := showIDs collect: [ :id | TmdbClient new tv_details: id ]."
-	allProgs := TvLibrary default allPrograms.
-	programs := allProgs collect: [ :p | self packageProgram: p ].
-	res at: #programs put: programs.
-	^ res
+	^self programs
 ]
 
 { #category : 'as yet unclassified' }
 TvAPI >> showNamesSamples [
 
-	| res dict  |
+	| res dict |
+	self deprecated:'behövs inte längre'.
 	res := Dictionary new.
-	res at: #status put: #ok.	dict := Dictionary new.
+	res at: #status put: #ok.
+	dict := Dictionary new.
 	dict := NeoJSONReader fromString: self showNamesSamplesJSON.
 	res at: #programs put: dict.
 	^ res
@@ -137,7 +145,8 @@ TvAPI >> showNamesSamples [
 
 { #category : 'as yet unclassified' }
 TvAPI >> showNamesSamplesJSON [
-
+self deprecated:'behövs inte längre'.
+	
 	^ ' [
     {
       "id": 1408,

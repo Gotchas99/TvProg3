@@ -51,8 +51,9 @@ TmdbClient >> find_by_id: anImdbId [
 			          TvProgram new
 				          type: #movie;
 				          tmdbId: (show at: #id) ].
-			all:=tv,movies.
-			all do:[:p|p retrieveTmdb ;retrieveOmdb ].
+	all := tv , movies.
+	all do: [ :p |
+			p				retrieve ].
 	^ all
 ]
 
@@ -153,4 +154,22 @@ TmdbClient >> watch_providers: aTmdbId [
 	providers := swedish at: #flatrate.
 	names := providers collect: [ :p | p at: #provider_name ].
 	^ names  \ self unavailable_providers 
+]
+
+{ #category : 'as yet unclassified' }
+TmdbClient >> watch_providers: aTmdbId season: aSeasonId [
+
+	| cl countries swedish providers names |
+	cl := self client
+		      addPath: #tv;
+		      addPath: aTmdbId asString;
+		addPath:#season;
+		addPath: aSeasonId asString;
+		      addPath: 'watch/providers'.
+	cl get.
+	countries := cl contents at: #results.
+	swedish := countries at: #SE.
+	providers := swedish at: #flatrate.
+	names := providers collect: [ :p | p at: #provider_name ].
+	^ names \ self unavailable_providers
 ]

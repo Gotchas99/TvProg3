@@ -31,6 +31,24 @@ TvLibrary >> addProgram: aProgram [
 	programs add: aProgram]
 ]
 
+{ #category : 'adding' }
+TvLibrary >> addProgramImdbID: aProgramID [
+
+	| findRes tc prog |
+	
+	tc:=TmdbClient new .
+	findRes:= tc find_by_id: aProgramID .
+	self assert: (findRes size = 1).
+	prog := findRes first.
+	self addProgram: prog.
+]
+
+{ #category : 'adding' }
+TvLibrary >> addProgramTmdbID: aProgramID [
+
+	self halt.
+]
+
 { #category : 'as yet unclassified' }
 TvLibrary >> allPrograms [
 

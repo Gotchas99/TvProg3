@@ -11,7 +11,8 @@ Class {
 		'seasons',
 		'interest',
 		'viewStatus',
-		'tmdbJsonSeasons'
+		'tmdbJsonSeasons',
+		'watchProviders'
 	],
 	#category : 'CAs-TvProg3-Core',
 	#package : 'CAs-TvProg3',
@@ -23,6 +24,12 @@ TvProgram >> at: aFldName [
 
 	| res |
 	res:= tmdbJson at:aFldName ifAbsent: [ omdbJson at:aFldName ].^res
+]
+
+{ #category : 'accessing' }
+TvProgram >> genres [
+
+	^ (tmdbJson at:#genres)collect:[:g|g at:#name]
 ]
 
 { #category : 'accessing' }
@@ -67,8 +74,8 @@ TvProgram >> name [
 
 { #category : 'accessing' }
 TvProgram >> number_of_seasons [
-
-	^ tmdbJson at:#number_of_seasons
+self assert: type = #tv.
+	^ tmdbJson at: #number_of_seasons
 ]
 
 { #category : 'parsing' }
@@ -92,6 +99,19 @@ TvProgram >> printOn: aStream [
 
 	super printOn: aStream.
 	aStream << '(' << type << ':' << tmdbId << '* ' << name << ')' 
+]
+
+{ #category : 'accessing' }
+TvProgram >> productionStatus [
+
+		^ tmdbJson at:#status
+]
+
+{ #category : 'retrieve' }
+TvProgram >> retrieve [
+
+	self retrieveTmdb .
+	self retrieveOmdb 
 ]
 
 { #category : 'retrieve' }
@@ -123,11 +143,21 @@ TvProgram >> retrieveTmdb [
 		ifFalse: [ imdbId := tmdbJson at: #imdb_id ]
 ]
 
+{ #category : 'retrieve' }
+TvProgram >> retrieveViewability [
+	"do this for show and for seasons"
+
+	| cl |
+	cl := TmdbClient new.
+	watchProviders := cl watch_providers: tmdbId.
+	seasons do: [ :s |
+		s watchProviders: (cl watch_providers: tmdbId season: s season_number) ]
+]
+
 { #category : 'accessing' }
 TvProgram >> seasons [
 
 	self assert: type = #tv.
-
 	^ seasons
 ]
 
@@ -156,5 +186,12 @@ TvProgram >> type: aType [
 { #category : 'accessing' }
 TvProgram >> viewStatus [
 self flag:'ska beräknas från säsonger'.
+	^ viewStatus ifNil: [ viewStatus := #new ]
+]
+
+{ #category : 'accessing' }
+TvProgram >> viewable [
+
+	"If any seasons are viewable"
 	^ viewStatus ifNil: [ viewStatus := #new ]
 ]
