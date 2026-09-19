@@ -26,9 +26,10 @@ TvSeason >> asDict [
 		at: #overview put: (tmdbJson at: #overview);
 		at: #poster_path put: (tmdbJson at: #poster_path);
 		at: #vote_average put: (tmdbJson at: #vote_average);
-		at: #viewStatus put: viewStatus;
-		at:watchProviders put: watchProviders.
-		
+		at: #viewStatus put: self viewStatus;
+		at: #watchProviders put: self watchProviders;
+		at:#viewable put: self viewable.
+
 
 	^ dict
 ]
@@ -61,6 +62,12 @@ season_number := aNumber
 ]
 
 { #category : 'accessing' }
+TvSeason >> seen [ 
+
+	 viewStatus:=#seen
+]
+
+{ #category : 'accessing' }
 TvSeason >> tmdbId: anId [
 
 	tmdbId := anId 
@@ -74,6 +81,22 @@ tmdbJson := aJsonDictionary
 { #category : 'accessing' }
 TvSeason >> viewStatus [ 
 ^viewStatus ifNil: [ viewStatus:=#new ]
+]
+
+{ #category : 'accessing' }
+TvSeason >> viewable [
+
+	| tmp |
+	tmp := true.
+	self viewStatus = #seen ifTrue: [ tmp := false ].
+	self watchProviders isEmptyOrNil ifTrue: [ tmp := false ]. 
+	^ tmp
+]
+
+{ #category : 'accessing' }
+TvSeason >> watchProviders [
+
+	^ watchProviders ifNil: [ watchProviders := #() ]
 ]
 
 { #category : 'as yet unclassified' }

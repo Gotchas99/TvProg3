@@ -65,3 +65,9 @@ TvLibrary >> at: aTmdbId [
 TvLibrary >> initialize [ 
 programs := OrderedCollection new.
 ]
+
+{ #category : 'as yet unclassified' }
+TvLibrary >> refreshViewability [
+
+	programs do: [ :p | p retrieveViewability ]
+]

@@ -151,7 +151,8 @@ TvProgram >> retrieveViewability [
 	cl := TmdbClient new.
 	watchProviders := cl watch_providers: tmdbId.
 	seasons do: [ :s |
-		s watchProviders: (cl watch_providers: tmdbId season: s season_number) ]
+		s watch_providers:
+			(cl watch_providers: tmdbId season: s season_number) ]
 ]
 
 { #category : 'accessing' }
@@ -185,7 +186,10 @@ TvProgram >> type: aType [
 
 { #category : 'accessing' }
 TvProgram >> viewStatus [
-self flag:'ska beräknas från säsonger'.
+
+	| allSeen |
+	self flag: 'ska beräknas från säsonger'.
+	allSeen:=seasons allSatisfy: [ :s|s viewStatus=#seen ].
 	^ viewStatus ifNil: [ viewStatus := #new ]
 ]
 
@@ -194,4 +198,10 @@ TvProgram >> viewable [
 
 	"If any seasons are viewable"
 	^ viewStatus ifNil: [ viewStatus := #new ]
+]
+
+{ #category : 'accessing' }
+TvProgram >> watchProviders [
+
+	^ watchProviders ifNil: [ watchProviders := #(  ) ]
 ]

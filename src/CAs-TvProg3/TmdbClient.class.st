@@ -163,12 +163,13 @@ TmdbClient >> watch_providers: aTmdbId season: aSeasonId [
 	cl := self client
 		      addPath: #tv;
 		      addPath: aTmdbId asString;
-		addPath:#season;
-		addPath: aSeasonId asString;
+		      addPath: #season;
+		      addPath: aSeasonId asString;
 		      addPath: 'watch/providers'.
 	cl get.
 	countries := cl contents at: #results.
 	swedish := countries at: #SE.
+	swedish ifNil: [ ^ #() ].
 	providers := swedish at: #flatrate.
 	names := providers collect: [ :p | p at: #provider_name ].
 	^ names \ self unavailable_providers
