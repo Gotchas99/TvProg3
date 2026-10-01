@@ -89,11 +89,8 @@ TvAPI >> cors: req [
 TvAPI >> packageProgram: aProgram [
 	"ideas for more fields: genres (list),seasons (with episode count)) "
 
-	| flds dict |
-	flds := { #id. #name. #tagline. #overview. #status. #vote_average. #imdbRating.
-	        #number_of_seasons. #number_of_episodes }.
-	dict := Dictionary new.
-	flds do: [ :fld | dict at: fld put: (aProgram at: fld) ].
+	| dict |
+	dict := aProgram asDict.
 	dict
 		at: #poster_thumbnail
 		put: 'https://image.tmdb.org/t/p/w92' , (aProgram at: #poster_path).
@@ -117,10 +114,9 @@ TvAPI >> programs [
 { #category : 'accessing' }
 TvAPI >> seasons: anID [
 
-	| program seasons tmp |
+	| program  tmp |
 	program := TvLibrary default at: anID asString.
-	seasons := Dictionary new.
-	tmp:=program seasons collect: [ :s | s asDict ].
+	tmp := program seasons collect: [ :s | s asDict ].
 	^ tmp
 ]
 

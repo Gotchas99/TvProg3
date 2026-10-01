@@ -19,6 +19,22 @@ Class {
 	#tag : 'Core'
 }
 
+{ #category : 'converting' }
+TvProgram >> asDict [
+
+	| flds dict |
+	flds := { #id. #name. #tagline. #overview. #status. #vote_average.
+	        #imdbRating. #number_of_seasons. #number_of_episodes }.
+	dict := Dictionary new.
+	flds do: [ :fld | dict at: fld put: (self at: fld) ].
+	dict
+		at: #viewStatus put: self viewStatus;
+		at: #watchProviders put: self watchProviders;
+		at: #viewable put: self viewable;
+				at: #genres put: self genres.
+	^ dict
+]
+
 { #category : 'accessing' }
 TvProgram >> at: aFldName [
 
