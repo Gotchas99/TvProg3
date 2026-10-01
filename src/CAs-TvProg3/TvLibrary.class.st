@@ -50,6 +50,14 @@ TvLibrary >> addProgramTmdbID: aProgramID [
 ]
 
 { #category : 'as yet unclassified' }
+TvLibrary >> allGenres [
+| allGenres |
+allGenres:=self allPrograms collect:#genres.
+allGenres := allGenres flattened asSet asSortedCollection .
+^allGenres 
+]
+
+{ #category : 'as yet unclassified' }
 TvLibrary >> allPrograms [
 
 	^programs

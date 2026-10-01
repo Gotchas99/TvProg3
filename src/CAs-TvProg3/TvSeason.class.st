@@ -2,9 +2,9 @@ Class {
 	#name : 'TvSeason',
 	#superclass : 'Object',
 	#instVars : [
-		'tmdbId',
 		'program',
 		'season_number',
+		'tmdbId',
 		'tmdbJson',
 		'viewStatus',
 		'watchProviders'
@@ -28,10 +28,28 @@ TvSeason >> asDict [
 		at: #vote_average put: (tmdbJson at: #vote_average);
 		at: #viewStatus put: self viewStatus;
 		at: #watchProviders put: self watchProviders;
-		at:#viewable put: self viewable.
+		at: #viewable put: self isViewable.
 
 
 	^ dict
+]
+
+{ #category : 'testing' }
+TvSeason >> isAvailable [
+	
+	^self watchProviders isEmptyOrNil not
+]
+
+{ #category : 'testing' }
+TvSeason >> isSeen [ 
+^viewStatus =#seen.
+]
+
+{ #category : 'testing' }
+TvSeason >> isViewable [
+
+	self isSeen ifTrue: [ ^ false ].
+	^self isAvailable 
 ]
 
 { #category : 'accessing' }
@@ -84,22 +102,12 @@ TvSeason >> viewStatus [
 ]
 
 { #category : 'accessing' }
-TvSeason >> viewable [
-
-	| tmp |
-	tmp := true.
-	self viewStatus = #seen ifTrue: [ tmp := false ].
-	self watchProviders isEmptyOrNil ifTrue: [ tmp := false ]. 
-	^ tmp
-]
-
-{ #category : 'accessing' }
 TvSeason >> watchProviders [
 
 	^ watchProviders ifNil: [ watchProviders := #() ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 TvSeason >> watch_providers: aList [
 watchProviders := aList 
 ]

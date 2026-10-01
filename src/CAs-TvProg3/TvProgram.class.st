@@ -3,15 +3,15 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'tmdbId',
-		'imdbId',
 		'tmdbJson',
+		'tmdbJsonSeasons',
 		'omdbJson',
+		'imdbId',
 		'name',
 		'type',
 		'seasons',
 		'interest',
 		'viewStatus',
-		'tmdbJsonSeasons',
 		'watchProviders'
 	],
 	#category : 'CAs-TvProg3-Core',
@@ -30,8 +30,8 @@ TvProgram >> asDict [
 	dict
 		at: #viewStatus put: self viewStatus;
 		at: #watchProviders put: self watchProviders;
-		at: #viewable put: self viewable;
-				at: #genres put: self genres.
+		at: #viewable put: self isViewable;
+		at: #genres put: self genres.
 	^ dict
 ]
 
@@ -81,6 +81,19 @@ TvProgram >> initialize [
 TvProgram >> interest [
 
 	^ interest ifNil:[interest:=#new]
+]
+
+{ #category : 'testing' }
+TvProgram >> isSeen [
+
+	^seasons allSatisfy: #isSeen
+]
+
+{ #category : 'testing' }
+TvProgram >> isViewable [
+	"If any seasons are viewable"
+
+	^ seasons anySatisfy: #isViewable  
 ]
 
 { #category : 'accessing' }
@@ -205,14 +218,7 @@ TvProgram >> viewStatus [
 
 	| allSeen |
 	self flag: 'ska beräknas från säsonger'.
-	allSeen:=seasons allSatisfy: [ :s|s viewStatus=#seen ].
-	^ viewStatus ifNil: [ viewStatus := #new ]
-]
-
-{ #category : 'accessing' }
-TvProgram >> viewable [
-
-	"If any seasons are viewable"
+	(seasons allSatisfy: #isSeen )ifTrue: [^#seen]..
 	^ viewStatus ifNil: [ viewStatus := #new ]
 ]
 
