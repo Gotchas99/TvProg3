@@ -3,7 +3,6 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'db',
-		'conn',
 		'writeQ',
 		'writeProcess'
 	],
@@ -39,8 +38,8 @@ Default ifNotNil:[self default close.
 { #category : 'class initialization' }
 TvDB class >> shutDown: quitting [
 	"Our system shutDown hook: stop all servers we manage"
-
- self default close 
+ 
+	quitting ifTrue: [ self default close ]
 ]
 
 { #category : 'class initialization' }
@@ -48,7 +47,10 @@ TvDB class >> startUp: resuming [
 	"Our system startUp hook"
 
 	"self default ensureLibrary."
-	self default open
+
+	resuming ifTrue: [ 
+			self reset.
+			self default open ]
 ]
 
 { #category : 'connection handling' }
@@ -69,13 +71,21 @@ TvDB >> colExists: colName inTable: tableName [
 	^tbl columnNames includes: colName
 ]
 
-{ #category : 'accessing' }
-TvDB >> conn [ ^conn
+{ #category : 'connection handling' }
+TvDB >> connectionString [
+
+	| dbName |
+	dbName := TvLibrary default isTestEnv 
+		          ifTrue: [ 'tvprog3_test' ]
+		          ifFalse: [ 'tvprog3' ].
+	^ 'psql://tvprog3:hokuspokus@ux8/' , dbName
 ]
 
 { #category : 'schema' }
 TvDB >> createContent [
-	self deprecated: 'Tu'.
+
+	| conn |
+	self deprecated: 'Tu'.self halt.
 	(self tableExists: #content) ifTrue: [ ^ self ].
 	conn execute: 'create table content(
 		id TEXT PRIMARY KEY
@@ -87,7 +97,9 @@ TvDB >> createContent [
 
 { #category : 'schema' }
 TvDB >> createMedia [
-	self deprecated: 'Tu'.
+
+	| conn |
+	self deprecated: 'Tu'.self halt.
 	(self tableExists: #media) ifTrue: [ ^ self ].
 	conn execute: 'create table media(
 		id TEXT PRIMARY KEY
@@ -103,7 +115,9 @@ TvDB >> createMedia [
 
 { #category : 'schema' }
 TvDB >> createPosts [
-	self deprecated: 'Tu'.
+
+	| conn |
+	self deprecated: 'Tu'.self halt.
 	(self tableExists: #posts) ifTrue: [ ^ self ].
 	conn execute: 'create table posts(
 		id INTEGER PRIMARY KEY
@@ -112,16 +126,28 @@ TvDB >> createPosts [
 	 )'
 ]
 
+{ #category : 'schema' }
+TvDB >> createProgram [
+
+(self tableExists: #program) ifTrue: [ ^ self ].
+	db execute: 'create table program(
+		tmdb_id INTEGER PRIMARY KEY
+		, imdb_id TEXT
+		, name TEXT
+		, type TEXT
+		, interest TEXT
+		, view_status TEXT
+		, watch_providers TEXT
+		, tmdb_json TEXT
+		, tmdb_json_seasons TEXT
+		, omdb_json TEXT
+	 )'
+]
+
 { #category : 'accessing' }
 TvDB >> db [
 
 	^ db
-]
-
-{ #category : 'accessing' }
-TvDB >> dbFilename [
-self deprecated: 'no file'
-	"^ TuLibrary default basePath / 'TuDatabase.db'"
 ]
 
 { #category : 'schema' }
@@ -193,10 +219,10 @@ TvDB >> initialize [
 TvDB >> open [
 
 	db ifNotNil: [ db connection isOpen ifTrue: [ ^ self ] ].
+	db := P3Client new.
+	db url: self connectionString.
+	db connect.
 	writeQ := AtomicSharedQueue new.
-	self flag: #todo.
-	"	db := SQLite3Database openOn: self dbFilename pathString."
-	"conn := db connection".
 	writeProcess := [
 		                [ self getWrite ] repeat.
 		                self traceCr: 'writeProcess died' ]
@@ -248,11 +274,50 @@ TvDB >> setupPosts [
 ]
 
 { #category : 'schema' }
+TvDB >> setupProgram [
+
+	self flag: #todo.
+	self createProgram.
+"	self ensureColumn: #tags type: #TEXT inTable: #posts.
+	self
+		ensureColumn: #hidden
+		type: #INTEGER
+		default: 'FALSE'
+		inTable: #posts"
+]
+
+{ #category : 'schema' }
 TvDB >> setupSchema [
-	self deprecated: 'Tu'.
-	self setupPosts.
+self flag:#todo.
+self setupProgram .
+	"self setupPosts.
 	self setupContent.
-	self setupMedia
+	self setupMedia"
+]
+
+{ #category : 'schema' }
+TvDB >> setupSeason [
+
+	self flag: #todo.
+	"self createPosts.
+	self ensureColumn: #tags type: #TEXT inTable: #posts.
+	self
+		ensureColumn: #hidden
+		type: #INTEGER
+		default: 'FALSE'
+		inTable: #posts"
+]
+
+{ #category : 'schema' }
+TvDB >> setupSystem [
+
+	self flag: #todo.
+	"self ensureColumn: #tags type: #TEXT inTable: #posts.
+	self
+		ensureColumn: #hidden
+		type: #INTEGER
+		default: 'FALSE'
+		inTable: #posts"
 ]
 
 { #category : 'testing' }
@@ -276,8 +341,8 @@ TvDB >> writeContent: aContent [
 		ON CONFLICT (id) DO
 		UPDATE SET 
 			post_id=excluded.post_id, type=excluded.type, disp_order=excluded.disp_order;'.
-			self flag:#todo.
-	db connection execute: sql with: aContent
+	self flag: #todo.
+	db  execute: sql with: aContent
 ]
 
 { #category : 'operations' }
@@ -286,6 +351,7 @@ TvDB >> writePost: aPostData [
 	| sql |
 	sql := 'INSERT INTO posts(id, blog_id, tags) VALUES (:id, :blog_id, :tags)
 		ON CONFLICT (id) DO
-		UPDATE SET blog_id=excluded.blog_id, tags=excluded.tags;'.			self flag:#todo.
-	db connection execute: sql with: aPostData
+		UPDATE SET blog_id=excluded.blog_id, tags=excluded.tags;'.
+	self flag: #todo.
+	db  execute: sql with: aPostData
 ]

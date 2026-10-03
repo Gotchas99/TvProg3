@@ -42,6 +42,33 @@ TvProgram >> at: aFldName [
 	res:= tmdbJson at:aFldName ifAbsent: [ omdbJson at:aFldName ].^res
 ]
 
+{ #category : 'as yet unclassified' }
+TvProgram >> dbData [
+
+	| dict  |
+	dict := Dictionary new.
+dict at:	 #tmdbJson put:  tmdbJson .
+	"dict at: #id put: id.
+	dict at: #blog_id put: blogId.
+	tagString := '|' join: self tags.
+	dict at: #tags put: tagString."
+	
+	"
+	 #tmdbId .
+			.
+			 #tmdbJsonSeasons .
+			 #omdbJson .
+			 #imdbId .
+			 #name .
+			 #type .
+			 #seasons .
+			 #interest .
+			 #viewStatus .
+			 #watchProviders
+			"
+	^ dict
+]
+
 { #category : 'accessing' }
 TvProgram >> genres [
 
@@ -182,6 +209,18 @@ TvProgram >> retrieveViewability [
 	seasons do: [ :s |
 		s watch_providers:
 			(cl watch_providers: tmdbId season: s season_number) ]
+]
+
+{ #category : 'as yet unclassified' }
+TvProgram >> saveToDb [
+
+	| msg |
+	msg := Message selector: #writeProgram: argument: self dbData.
+	TvDB default queueWrite: msg.
+	"
+	
+	content do: [ :each | each saveToDb ]"
+	
 ]
 
 { #category : 'accessing' }

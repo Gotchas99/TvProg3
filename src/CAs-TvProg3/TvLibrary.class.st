@@ -74,6 +74,11 @@ TvLibrary >> initialize [
 programs := OrderedCollection new.
 ]
 
+{ #category : 'testing' }
+TvLibrary >> isTestEnv [ 
+^ NetNameResolver localHostName = 'CAs1b'
+]
+
 { #category : 'as yet unclassified' }
 TvLibrary >> refreshViewability [
 
