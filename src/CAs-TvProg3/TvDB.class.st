@@ -82,51 +82,6 @@ TvDB >> connectionString [
 ]
 
 { #category : 'schema' }
-TvDB >> createContent [
-
-	| conn |
-	self deprecated: 'Tu'.self halt.
-	(self tableExists: #content) ifTrue: [ ^ self ].
-	conn execute: 'create table content(
-		id TEXT PRIMARY KEY
-		, post_id INTEGER
-		, type TEXT
-		, disp_order INTEGER DEFAULT (999)
-	 )'
-]
-
-{ #category : 'schema' }
-TvDB >> createMedia [
-
-	| conn |
-	self deprecated: 'Tu'.self halt.
-	(self tableExists: #media) ifTrue: [ ^ self ].
-	conn execute: 'create table media(
-		id TEXT PRIMARY KEY
-		, content_id TEXT
-		, type TEXT
-		, path TEXT
-		, width INTEGER
-		, height INTEGER
-		, cropped BOOLEAN
-		, origDimension BOOLEAN
-	 )'
-]
-
-{ #category : 'schema' }
-TvDB >> createPosts [
-
-	| conn |
-	self deprecated: 'Tu'.self halt.
-	(self tableExists: #posts) ifTrue: [ ^ self ].
-	conn execute: 'create table posts(
-		id INTEGER PRIMARY KEY
-		, blog_id TEXT
-		, tags TEXT
-	 )'
-]
-
-{ #category : 'schema' }
 TvDB >> createProgram [
 
 (self tableExists: #program) ifTrue: [ ^ self ].
@@ -162,22 +117,6 @@ TvDB >> createSeason [
 TvDB >> db [
 
 	^ db
-]
-
-{ #category : 'schema' }
-TvDB >> dropContent [
-	self deprecated: 'Tu'.
-	self halt.
-	(self tableExists: #content) ifFalse: [ ^ self ].
-	conn execute: 'DROP TABLE content'
-]
-
-{ #category : 'schema' }
-TvDB >> dropPosts [
-	self deprecated: 'Tu'.
-	self halt.
-	(self tableExists: #posts) ifFalse: [ ^ self ].
-	conn execute: 'DROP TABLE posts'
 ]
 
 { #category : 'schema-util' }
@@ -262,30 +201,6 @@ TvDB >> queueWrite: aMsg [
 	writeQ nextPut: aMsg.
 	"self traceCr: 'add, writeQ: ' , writeQ size asString."
 	Processor yield
-]
-
-{ #category : 'schema' }
-TvDB >> setupContent [
-	self deprecated: 'Tu'.
-	self createContent
-]
-
-{ #category : 'schema' }
-TvDB >> setupMedia [
-	self deprecated: 'Tu'.
-	self createMedia
-]
-
-{ #category : 'schema' }
-TvDB >> setupPosts [
-	self deprecated: 'Tu'.
-	self createPosts.
-	self ensureColumn: #tags type: #TEXT inTable: #posts.
-	self
-		ensureColumn: #hidden
-		type: #INTEGER
-		default: 'FALSE'
-		inTable: #posts
 ]
 
 { #category : 'schema' }
