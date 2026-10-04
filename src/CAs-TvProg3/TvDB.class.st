@@ -355,3 +355,34 @@ TvDB >> writePost: aPostData [
 	self flag: #todo.
 	db  execute: sql with: aPostData
 ]
+
+{ #category : 'operations' }
+TvDB >> writeProgram: aProgramDict [
+
+	| statement sql fields insert placeHolders values doUpdate |
+	self flag: #todo.
+	fields := ',' join:aProgramDict keys.
+	insert :='INSERT INTO program (',fields ,')' .
+	placeHolders:=
+	',' join: ((1 to:aProgramDict size ) collect:[:i|'$', i asString]).
+	values:= 'VALUES (',placeHolders,') '.
+	doUpdate:=
+	', ' join: (
+	aProgramDict keys allButFirst collect:[:fld|fld ,'= EXCLUDED.',fld]
+	)
+	.
+	sql := insert, 
+		values,
+		' ON CONFLICT(tmdb_id)
+		DO UPDATE SET '
+		,doUpdate .
+"	statement := db prepare: sql.
+	statement execute: { 1. 'foo'. 75.5. true }.
+	statement close
+"	"INSERT INTO inventory (id, name, price, quantity)
+VALUES (1, 'A', 16.99, 120)
+ON CONFLICT(id)
+DO UPDATE SET
+  price = EXCLUDED.price,
+  quantity = EXCLUDED.quantity;"
+]

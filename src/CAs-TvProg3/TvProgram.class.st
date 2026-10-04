@@ -45,27 +45,18 @@ TvProgram >> at: aFldName [
 { #category : 'as yet unclassified' }
 TvProgram >> dbData [
 
-	| dict  |
+	| dict |
 	dict := Dictionary new.
-dict at:	 #tmdbJson put:  tmdbJson .
-	"dict at: #id put: id.
-	dict at: #blog_id put: blogId.
-	tagString := '|' join: self tags.
-	dict at: #tags put: tagString."
-	
-	"
-	 #tmdbId .
-			.
-			 #tmdbJsonSeasons .
-			 #omdbJson .
-			 #imdbId .
-			 #name .
-			 #type .
-			 #seasons .
-			 #interest .
-			 #viewStatus .
-			 #watchProviders
-			"
+	dict at:#tmdb_id put: tmdbId .
+	dict at:#imdb_id put: imdbId .
+	dict at:#name put: name .
+	dict at:#type put: type .
+	dict at:#interest put: interest .
+	dict at:#view_status put: viewStatus .
+	dict at: #watch_providers put: ('|' join: watchProviders).
+	dict at: #tmdbJson put: (NeoJSONWriter toStringPretty: tmdbJson).
+	dict at: #tmdbJsonSeasons put: (NeoJSONWriter toStringPretty: tmdbJsonSeasons).
+	dict at: #omdbJson put: (NeoJSONWriter toStringPretty: omdbJson).
 	^ dict
 ]
 
