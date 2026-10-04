@@ -44,7 +44,6 @@ TvSeason >> asDict [
 TvSeason >> dbData [
 
 	| dict |
-	self halt.
 	dict := Dictionary new.
 	dict at: #program_tmdb_id put: program tmdbId.
 	dict at: #season_number put: season_number.

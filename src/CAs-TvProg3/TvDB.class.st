@@ -396,3 +396,23 @@ TvDB >> writeProgram: aProgramDict [
 	statement execute:  aProgramDict values .
 	statement close
 ]
+
+{ #category : 'operations' }
+TvDB >> writeSeason: aSeasonDict [
+
+	| sql fields insert placeHolders values doUpdate statement |
+	fields := ',' join: aSeasonDict keys.
+	insert := 'INSERT INTO season (' , fields , ')'.
+	placeHolders := ',' join:
+		                ((1 to: aSeasonDict size) collect: [ :i |
+			                 '$' , i asString ]).
+	values := ' VALUES (' , placeHolders , ') '.
+	doUpdate := ', ' join: (aSeasonDict keys
+			             reject: [ :fld | fld = #tmdb_id ]
+			             thenCollect: [ :fld | fld , '= EXCLUDED.' , fld ]).
+	sql := insert , values , ' ON CONFLICT(tmdb_id) DO UPDATE SET '
+	       , doUpdate.
+	statement := db prepare: sql.
+	statement execute: aSeasonDict values.
+	statement close
+]

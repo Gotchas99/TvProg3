@@ -145,6 +145,7 @@ TvProgram >> parseOmdb [
 TvProgram >> parseTmdb [
 
 	name := tmdbJson at: #name.
+	tmdbJsonSeasons :=(tmdbJson at: #seasons).
 	(tmdbJson at: #seasons) do: [ :json |
 			seasons
 				detect: [ :s | s season_number = (json at: #season_number) ]
