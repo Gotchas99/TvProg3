@@ -145,13 +145,16 @@ TvProgram >> parseOmdb [
 TvProgram >> parseTmdb [
 
 	name := tmdbJson at: #name.
-self assert:	seasons isNil.
-	seasons := (tmdbJson at: #seasons) collect: [ :s |
-			           TvSeason new
-				           program: self;
-				           tmdbJson: s;
-				           tmdbId: (s at: #id);
-				           season_number: (s at: #season_number) ]
+	(tmdbJson at: #seasons) do: [ :json |
+			seasons
+				detect: [ :s | s season_number = (json at: #season_number) ]
+				ifFound: [ :season | season tmdbJson: json ]
+				ifNone: [
+						seasons add: (TvSeason new
+								 program: self;
+								 tmdbJson: json;
+								 tmdbId: (json at: #id);
+								 season_number: (json at: #season_number)) ] ]
 ]
 
 { #category : 'printing' }

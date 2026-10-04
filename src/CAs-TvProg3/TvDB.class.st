@@ -144,6 +144,20 @@ TvDB >> createProgram [
 	 )'
 ]
 
+{ #category : 'schema' }
+TvDB >> createSeason [
+
+	(self tableExists: #season) ifTrue: [ ^ self ].
+	db execute: 'create table season(
+		tmdb_id INTEGER PRIMARY KEY
+		, season_number INTEGER
+		, program_tmdb_id INTEGER
+		, tmdb_json TEXT
+		, view_status TEXT
+		, watch_providers TEXT
+		)'
+]
+
 { #category : 'accessing' }
 TvDB >> db [
 
@@ -222,6 +236,7 @@ TvDB >> open [
 	db := P3Client new.
 	db url: self connectionString.
 	db connect.
+	self setupSchema.
 	writeQ := AtomicSharedQueue new.
 	writeProcess := [
 		                [ self getWrite ] repeat.
@@ -276,9 +291,8 @@ TvDB >> setupPosts [
 { #category : 'schema' }
 TvDB >> setupProgram [
 
-	self flag: #todo.
-	self createProgram.
-"	self ensureColumn: #tags type: #TEXT inTable: #posts.
+	self createProgram
+	"	self ensureColumn: #tags type: #TEXT inTable: #posts.
 	self
 		ensureColumn: #hidden
 		type: #INTEGER
@@ -288,8 +302,9 @@ TvDB >> setupProgram [
 
 { #category : 'schema' }
 TvDB >> setupSchema [
-self flag:#todo.
-self setupProgram .
+
+	self setupProgram.
+	self setupSeason .
 	"self setupPosts.
 	self setupContent.
 	self setupMedia"
@@ -298,9 +313,8 @@ self setupProgram .
 { #category : 'schema' }
 TvDB >> setupSeason [
 
-	self flag: #todo.
-	"self createPosts.
-	self ensureColumn: #tags type: #TEXT inTable: #posts.
+	self createSeason .
+	"self ensureColumn: #tags type: #TEXT inTable: #posts.
 	self
 		ensureColumn: #hidden
 		type: #INTEGER
@@ -322,8 +336,15 @@ TvDB >> setupSystem [
 
 { #category : 'testing' }
 TvDB >> tableExists: tableName [
+| result tableNames |
+result := db query: '
+	SELECT tablename 
+	FROM pg_tables 
+	WHERE schemaname = ''public'' 
+	ORDER BY tablename'.
 
-	^ db tables anySatisfy: [ :t | t name = tableName ] 
+tableNames := result data collect: #first.
+	^ tableNames anySatisfy: [ :t | t  = tableName ] 
 ]
 
 { #category : 'accessing' }

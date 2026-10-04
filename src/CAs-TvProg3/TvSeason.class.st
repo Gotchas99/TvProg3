@@ -41,8 +41,18 @@ TvSeason >> asDict [
 ]
 
 { #category : 'as yet unclassified' }
-TvSeason >> dbData [ 
-self halt.
+TvSeason >> dbData [
+
+	| dict |
+	self halt.
+	dict := Dictionary new.
+	dict at: #program_tmdb_id put: program tmdbId.
+	dict at: #season_number put: season_number.
+	dict at: #tmdb_id put: tmdbId.
+	dict at: #tmdb_json put: (NeoJSONWriter toStringPretty: tmdbJson).
+	dict at: #view_status put: viewStatus.
+	dict at: #watch_providers put: ('|' join: watchProviders).
+	^ dict 
 ]
 
 { #category : 'testing' }
