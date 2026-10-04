@@ -19,6 +19,12 @@ Class {
 	#tag : 'Core'
 }
 
+{ #category : 'as yet unclassified' }
+TvProgram class >> instancesNotInLibrary [
+
+	^self allInstances reject:[:p|p isInLibrary ].
+]
+
 { #category : 'converting' }
 TvProgram >> asDict [
 
@@ -54,9 +60,9 @@ TvProgram >> dbData [
 	dict at:#interest put: interest .
 	dict at:#view_status put: viewStatus .
 	dict at: #watch_providers put: ('|' join: watchProviders).
-	dict at: #tmdbJson put: (NeoJSONWriter toStringPretty: tmdbJson).
-	dict at: #tmdbJsonSeasons put: (NeoJSONWriter toStringPretty: tmdbJsonSeasons).
-	dict at: #omdbJson put: (NeoJSONWriter toStringPretty: omdbJson).
+	dict at: #tmdb_json put: (NeoJSONWriter toStringPretty: tmdbJson).
+	dict at: #tmdb_json_seasons put: (NeoJSONWriter toStringPretty: tmdbJsonSeasons).
+	dict at: #omdb_json put: (NeoJSONWriter toStringPretty: omdbJson).
 	^ dict
 ]
 
@@ -102,6 +108,12 @@ TvProgram >> interest [
 ]
 
 { #category : 'testing' }
+TvProgram >> isInLibrary [
+
+	^ (TvLibrary default at: self tmdbId) =self 
+]
+
+{ #category : 'testing' }
 TvProgram >> isSeen [
 
 	^seasons allSatisfy: #isSeen
@@ -125,18 +137,19 @@ self assert: type = #tv.
 	^ tmdbJson at: #number_of_seasons
 ]
 
-{ #category : 'parsing' }
+{ #category : 'retrieve' }
 TvProgram >> parseOmdb [
 ]
 
-{ #category : 'parsing' }
+{ #category : 'retrieve' }
 TvProgram >> parseTmdb [
 
 	name := tmdbJson at: #name.
+self assert:	seasons isNil.
 	seasons := (tmdbJson at: #seasons) collect: [ :s |
 			           TvSeason new
 				           program: self;
-				           tmdbJson: s; 
+				           tmdbJson: s;
 				           tmdbId: (s at: #id);
 				           season_number: (s at: #season_number) ]
 ]
@@ -207,18 +220,15 @@ TvProgram >> saveToDb [
 
 	| msg |
 	msg := Message selector: #writeProgram: argument: self dbData.
-	TvDB default queueWrite: msg.
-	"
-	
-	content do: [ :each | each saveToDb ]"
-	
+	TvDB default queueWrite: msg
+.	seasons  do: [ :each | each saveToDb ]
 ]
 
 { #category : 'accessing' }
 TvProgram >> seasons [
 
 	self assert: type = #tv.
-	^ seasons
+	^ seasons ifNil:[seasons :=OrderedCollection new]
 ]
 
 { #category : 'accessing' }

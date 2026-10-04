@@ -14,6 +14,12 @@ Class {
 	#tag : 'Core'
 }
 
+{ #category : 'as yet unclassified' }
+TvSeason class >> instancesNotInLibrary [
+self flag:#todo.
+	^self allInstances reject:[:p|p isInLibrary ].
+]
+
 { #category : 'converting' }
 TvSeason >> asDict [
 
@@ -32,6 +38,11 @@ TvSeason >> asDict [
 
 
 	^ dict
+]
+
+{ #category : 'as yet unclassified' }
+TvSeason >> dbData [ 
+self halt.
 ]
 
 { #category : 'testing' }
@@ -63,9 +74,31 @@ TvSeason >> overview [
 	^ tmdbJson at: #overview
 ]
 
+{ #category : 'printing' }
+TvSeason >> printOn: aStream [
+
+super printOn: aStream.
+	aStream << '('  << program name <<':'<< season_number asString <<')'
+]
+
+{ #category : 'accessing' }
+TvSeason >> program [ ^
+
+	program
+]
+
 { #category : 'accessing' }
 TvSeason >> program: aTvProgram [ 
 program := aTvProgram 
+]
+
+{ #category : 'as yet unclassified' }
+TvSeason >> saveToDb [
+
+	| msg |
+	msg := Message selector: #writeSeason: argument: self dbData.
+	TvDB default queueWrite: msg.
+	
 ]
 
 { #category : 'accessing' }
