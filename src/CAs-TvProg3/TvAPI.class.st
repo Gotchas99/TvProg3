@@ -101,13 +101,17 @@ TvAPI >> packageProgram: aProgram [
 TvAPI >> patchSeason: req [
 
 	| fields doc id season newSeen |
-	self halt.
-	fields:= req mergedFields .
-	doc:= NeoJSONReader fromString: (req contents).
-	id:= fields at:#id.
-	season:= TvLibrary default seasonAt: id.
-	newSeen:=((doc at:#seen)=true)ifTrue:['seen']ifFalse:[(doc at:#seen)=false ifTrue:[ 'new']ifFalse:[(doc at:#seen)] ].
-	season viewStatus: newSeen..
+	fields := req mergedFields.
+	doc := NeoJSONReader fromString: req contents.
+	id := fields at: #id.
+	season := TvLibrary default seasonAt: id.
+	newSeen := (doc at: #seen) = true
+		           ifTrue: [ 'seen' ]
+		           ifFalse: [
+				           (doc at: #seen) = false
+					           ifTrue: [ 'new' ]
+					           ifFalse: [ doc at: #seen ] ].
+	season viewStatus: newSeen.
 	^ 'ok'
 ]
 
@@ -214,8 +218,8 @@ TvAPI >> start [
 			          (#defaultOutput -> #json).
 			          (#debugMode -> true) }.
 	teapot
-		before:
-			'*' -> [ :req | self traceCr: 'Teapot: ' , req uri asString ];
+		"before:
+			'*' -> [ :req | self traceCr: 'Teapot: ' , req uri asString ];" 
 		after: '*' -> [ :req :resp |
 				resp headers at: 'Access-Control-Allow-Origin' put: '*' ];
 		OPTIONS: '*' -> [ :req | self cors: req ];
