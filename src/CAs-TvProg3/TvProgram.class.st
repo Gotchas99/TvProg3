@@ -219,7 +219,7 @@ TvProgram >> retrieveViewability [
 			(cl watch_providers: tmdbId season: s season_number) ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'database' }
 TvProgram >> saveToDb [
 
 	| msg |

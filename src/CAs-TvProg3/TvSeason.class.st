@@ -40,7 +40,7 @@ TvSeason >> asDict [
 	^ dict
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'database' }
 TvSeason >> dbData [
 
 	| dict |
@@ -101,7 +101,7 @@ TvSeason >> program: aTvProgram [
 program := aTvProgram 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'database' }
 TvSeason >> saveToDb [
 
 	| msg |
@@ -128,6 +128,12 @@ TvSeason >> seen [
 ]
 
 { #category : 'accessing' }
+TvSeason >> tmdbId [ ^
+
+	tmdbId 
+]
+
+{ #category : 'accessing' }
 TvSeason >> tmdbId: anId [
 
 	tmdbId := anId 
@@ -141,6 +147,12 @@ tmdbJson := aJsonDictionary
 { #category : 'accessing' }
 TvSeason >> viewStatus [ 
 ^viewStatus ifNil: [ viewStatus:=#new ]
+]
+
+{ #category : 'accessing' }
+TvSeason >> viewStatus: aString [
+
+	viewStatus := aString
 ]
 
 { #category : 'accessing' }

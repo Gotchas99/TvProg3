@@ -98,6 +98,20 @@ TvAPI >> packageProgram: aProgram [
 ]
 
 { #category : 'routes' }
+TvAPI >> patchSeason: req [
+
+	| fields doc id season newSeen |
+	self halt.
+	fields:= req mergedFields .
+	doc:= NeoJSONReader fromString: (req contents).
+	id:= fields at:#id.
+	season:= TvLibrary default seasonAt: id.
+	newSeen:=((doc at:#seen)=true)ifTrue:['seen']ifFalse:[(doc at:#seen)=false ifTrue:[ 'new']ifFalse:[(doc at:#seen)] ].
+	season viewStatus: newSeen..
+	^ 'ok'
+]
+
+{ #category : 'routes' }
 TvAPI >> programs [
 
 	| res programs allProgs |
@@ -111,6 +125,13 @@ TvAPI >> programs [
 	^ res
 ]
 
+{ #category : 'server' }
+TvAPI >> restartServer [
+
+	<script: 'self  restartDefault'>
+self stop;start	 .
+]
+
 { #category : 'accessing' }
 TvAPI >> seasons: anID [
 
@@ -118,12 +139,6 @@ TvAPI >> seasons: anID [
 	program := TvLibrary default at: anID asString.
 	tmp := program seasons collect: [ :s | s asDict ].
 	^ tmp
-]
-
-{ #category : 'routes' }
-TvAPI >> showNames [
-
-	^self programs
 ]
 
 { #category : 'as yet unclassified' }
@@ -199,13 +214,16 @@ TvAPI >> start [
 			          (#defaultOutput -> #json).
 			          (#debugMode -> true) }.
 	teapot
+		before:
+			'*' -> [ :req | self traceCr: 'Teapot: ' , req uri asString ];
 		after: '*' -> [ :req :resp |
 				resp headers at: 'Access-Control-Allow-Origin' put: '*' ];
 		OPTIONS: '*' -> [ :req | self cors: req ];
 		GET: '/' -> 'asd';
-		GET: '/shows' -> [ :req | self showNames ];
+		GET: '/shows' -> [ :req | self programs ];
 		GET: '/seasons' -> [ :req | self seasons: (req at: #id) ];
-		GET: '/status' -> [ :req | self status ].
+		GET: '/status' -> [ :req | self status ];
+		PATCH: 'season' -> [ :req | self patchSeason: req ].
 	teapot start
 	"serveStatic: '/statics' from: TuLibrary default postPath;
 		GET: '/tags' -> [ :req | TuLibrary default tags ];
@@ -213,17 +231,13 @@ TvAPI >> start [
 				TuLibrary default
 					postsHaving: (req at: #having)
 					butNot: (req at: #not) ];
-		GET: '/post' -> [ :req | TuLibrary default postDict: (req at: #id) ];
-		GET:
-			'/inspect' -> [ :req | TuLibrary default inspect: (req at: #id) ];
 		PUT: '/post'
 			-> [ :req | TuLibrary default updatePost: (req at: #id) with: req ];
 		PUT: '/content' -> [ :req |
 				TuLibrary default
 					updateContentInPost: (req at: #post_id)
 					id: (req at: #id)
-					with: req ]." "before:
-			'*' -> [ :req | self traceCr: 'Teapot: ' , req uri asString ];"
+					with: req ]." ""
 ]
 
 { #category : 'routes' }

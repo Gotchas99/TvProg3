@@ -2,7 +2,8 @@ Class {
 	#name : 'TvLibrary',
 	#superclass : 'Object',
 	#instVars : [
-		'programs'
+		'programs',
+		'seasonIndex'
 	],
 	#classVars : [
 		'Default'
@@ -27,8 +28,7 @@ TvLibrary class >> reset [
 { #category : 'adding' }
 TvLibrary >> addProgram: aProgram [
 
-(self at: aProgram tmdbId )ifNil: [
-	programs add: aProgram]
+	(self at: aProgram tmdbId) ifNil: [ programs add: aProgram . self indexSeasons ]
 ]
 
 { #category : 'adding' }
@@ -74,9 +74,19 @@ TvLibrary >> at: aTmdbId [
 	^programs detect: [ :p | p tmdbId = aTmdbId asString] ifNone: [ nil ]
 ]
 
+{ #category : 'internal' }
+TvLibrary >> indexSeasons [
+
+	seasonIndex := Dictionary new.
+	programs do: [ :p | p seasons do: [ :s | 
+			seasonIndex at: s tmdbId put: s ] ]
+]
+
 { #category : 'initialization' }
-TvLibrary >> initialize [ 
-programs := OrderedCollection new.
+TvLibrary >> initialize [
+
+	programs := OrderedCollection new.
+	self indexSeasons.
 ]
 
 { #category : 'testing' }
@@ -84,8 +94,15 @@ TvLibrary >> isTestEnv [
 ^ NetNameResolver localHostName = 'CAs1b'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'internal' }
 TvLibrary >> refreshViewability [
 
 	programs do: [ :p | p retrieveViewability ]
+]
+
+{ #category : 'accessing' }
+TvLibrary >> seasonAt: aTmdbId [
+
+	^ seasonIndex
+		 at: aTmdbId asInteger
 ]
