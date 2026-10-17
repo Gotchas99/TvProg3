@@ -48,7 +48,7 @@ TvProgram >> at: aFldName [
 	res:= tmdbJson at:aFldName ifAbsent: [ omdbJson at:aFldName ].^res
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'database' }
 TvProgram >> dbData [
 
 	| dict |

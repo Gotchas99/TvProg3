@@ -35,21 +35,26 @@ TvLibrary >> addProgram: aProgram [
 TvLibrary >> addProgramImdbID: aProgramID [
 
 	| findRes tc prog |
-	
-	tc:=TmdbClient new .
-	findRes:= tc find_by_id: aProgramID .
-	self assert: (findRes size = 1).
+self halt.
+	tc := TmdbClient new.
+	findRes := tc find_by_id: aProgramID.
+	self assert: findRes size = 1.
 	prog := findRes first.
-	self addProgram: prog.
+	self addProgram: prog
 ]
 
 { #category : 'adding' }
 TvLibrary >> addProgramTmdbID: aProgramID [
 
-	self halt.
+	| findRes tc prog |
+	tc := TmdbClient new.
+	findRes := tc find_by_id: aProgramID.
+	self assert: findRes size = 1.
+	prog := findRes first.
+	self addProgram: prog
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 TvLibrary >> allGenres [
 | allGenres |
 allGenres:=self allPrograms collect:#genres.
@@ -57,19 +62,19 @@ allGenres := allGenres flattened asSet asSortedCollection .
 ^allGenres 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 TvLibrary >> allPrograms [
 
 	^programs
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 TvLibrary >> at: aTmdbId [
 
 	^programs detect: [ :p | p tmdbId = aTmdbId asString] ifNone: [ nil ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
 TvLibrary >> initialize [ 
 programs := OrderedCollection new.
 ]

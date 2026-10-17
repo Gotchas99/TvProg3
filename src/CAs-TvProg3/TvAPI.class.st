@@ -71,7 +71,7 @@ TvAPI class >> stopDefault [
 		Default := nil ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'routes' }
 TvAPI >> cors: req [
 
 	| resp |
@@ -85,7 +85,7 @@ TvAPI >> cors: req [
 	^ resp
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 TvAPI >> packageProgram: aProgram [
 	"ideas for more fields: genres (list),seasons (with episode count)) "
 
@@ -97,7 +97,7 @@ TvAPI >> packageProgram: aProgram [
 	^ dict
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'routes' }
 TvAPI >> programs [
 
 	| res programs allProgs |
@@ -120,7 +120,7 @@ TvAPI >> seasons: anID [
 	^ tmp
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'routes' }
 TvAPI >> showNames [
 
 	^self programs
@@ -192,7 +192,7 @@ self deprecated:'behövs inte längre'.
   ]'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'server' }
 TvAPI >> start [
 
 	teapot := Teapot configure: {
@@ -204,7 +204,8 @@ TvAPI >> start [
 		OPTIONS: '*' -> [ :req | self cors: req ];
 		GET: '/' -> 'asd';
 		GET: '/shows' -> [ :req | self showNames ];
-				GET: '/seasons' -> [ :req | self seasons: (req at: #id) ].
+		GET: '/seasons' -> [ :req | self seasons: (req at: #id) ];
+		GET: '/status' -> [ :req | self status ].
 	teapot start
 	"serveStatic: '/statics' from: TuLibrary default postPath;
 		GET: '/tags' -> [ :req | TuLibrary default tags ];
@@ -225,7 +226,7 @@ TvAPI >> start [
 			'*' -> [ :req | self traceCr: 'Teapot: ' , req uri asString ];"
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'routes' }
 TvAPI >> status [
 
 	| raw |
@@ -233,7 +234,7 @@ TvAPI >> status [
 	^ raw
 ]
 
-{ #category : 'accessing' }
+{ #category : 'server' }
 TvAPI >> stop [
 
 	teapot ifNotNil: [

@@ -48,11 +48,11 @@ BaselineOfTvProg3 >> setUpDependencies: spec [
 					loads: #( 'core' ) ];
 		baseline: 'ZincHTTPComponents'
 		with: [ spec repository: 'github://svenvc/zinc' ];
-	
-		baseline: 'NeoConsole'
-		with: [ spec repository: 'github://svenvc/NeoConsole/src' ]
-		
-		"project: 'Zinc-Zodiac'
+		baseline: 'NeoConsole' with: [ "project: 'Zinc-Zodiac'
 		copyFrom: 'ZincHTTPComponents'
 		with: [ spec loads: 'Zinc-Zodiac-Core' ];"
+		spec repository: 'github://svenvc/NeoConsole/src' ];
+		baseline: 'Bootstrap5'
+		with: [
+		spec repository: 'github://astares/Seaside-Bootstrap5:master/src' ]
 ]
