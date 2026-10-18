@@ -79,9 +79,9 @@ TvAPI >> cors: req [
 	resp headerName: 'Access-Control-Allow-Origin' value: '*'.
 	resp
 		headerName: 'Access-Control-Allow-Methods'
-		value: 'POST, GET, OPTIONS, PUT'.
+		value: 'POST, GET, OPTIONS, PUT, PATCH'.
 	resp headerName: 'Access-Control-Allow-Headers' value: 'content-type'.
-	self traceCr: 'options'.
+	self traceCr: 'CORS options'.
 	^ resp
 ]
 
@@ -105,12 +105,12 @@ TvAPI >> patchSeason: req [
 	doc := NeoJSONReader fromString: req contents.
 	id := fields at: #id.
 	season := TvLibrary default seasonAt: id.
-	newSeen := (doc at: #seen) = true
+	newSeen := (doc at: #newStatus) = true
 		           ifTrue: [ 'seen' ]
 		           ifFalse: [
-				           (doc at: #seen) = false
+				           (doc at: #newStatus) = false
 					           ifTrue: [ 'new' ]
-					           ifFalse: [ doc at: #seen ] ].
+					           ifFalse: [ doc at: #newStatus ] ].
 	season viewStatus: newSeen.
 	^ 'ok'
 ]
