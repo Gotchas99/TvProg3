@@ -208,12 +208,12 @@ TgBot >> stop [
 "	self closeDelegate."
 ]
 
-{ #category : 'public' }
+{ #category : 'accessing' }
 TgBot >> token [ 
 	^ token
 ]
 
-{ #category : 'public' }
+{ #category : 'request handling' }
 TgBot >> updateUpdateId: anId [ 
 	(anId>offset)ifTrue: [ offset:=anId  ]
 ]

@@ -19,12 +19,12 @@ TgMessage >> asDict [
 ^	dict 
 ]
 
-{ #category : 'converting' }
+{ #category : 'accessing' }
 TgMessage >> chatid [ 
 	^ (dict at: #chat)at:#id
 ]
 
-{ #category : 'converting' }
+{ #category : 'accessing' }
 TgMessage >> chatid: aChatId [ 
 	^ dict at: 'chat_id' put: aChatId 
 ]
@@ -34,23 +34,23 @@ TgMessage >> format: aString [
 	dict at:'parse_mode' put: aString
 ]
 
-{ #category : 'converting' }
+{ #category : 'initialization' }
 TgMessage >> fromDict: aMessageDict [ 
 	dict := aMessageDict.
 	self traceCr: 'aMessage: ', self text
 ]
 
-{ #category : 'converting' }
+{ #category : 'initialization' }
 TgMessage >> initialize [ 
 	dict:= Dictionary new.
 ]
 
-{ #category : 'converting' }
+{ #category : 'accessing' }
 TgMessage >> text [ 
 	^ dict at: 'text' ifAbsent:['<tomt>']
 ]
 
-{ #category : 'converting' }
+{ #category : 'accessing' }
 TgMessage >> text:aText [ 
 	dict at: 'text' put: aText 
 ]

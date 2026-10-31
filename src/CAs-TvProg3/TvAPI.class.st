@@ -81,7 +81,7 @@ TvAPI >> cors: req [
 		headerName: 'Access-Control-Allow-Methods'
 		value: 'POST, GET, OPTIONS, PUT, PATCH'.
 	resp headerName: 'Access-Control-Allow-Headers' value: 'content-type'.
-	self traceCr: 'CORS options'.
+	"self traceCr: 'CORS options'."
 	^ resp
 ]
 
