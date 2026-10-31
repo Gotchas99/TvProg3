@@ -13,15 +13,17 @@ BaselineOfTvProg3 >> baseline: spec [
 			self setUpDependencies: spec.
 
 			spec
-				package: 'TvProg3-Core'
-				with: [ spec requires: #( 'NeoJSON' 'P3'  'Teapot' 'Tealight' 'NeoConsole') ].
-				spec
+				package: 'CAs-TvProg3'
+				with: [
+				spec requires:
+					#( 'NeoJSON' 'P3' 'Teapot' 'Tealight' 'NeoConsole' ) ].
+			spec
 				package: 'TvProg3-Web'
-				with: [ spec requires: #('TvProg3-Core' 'Bootstrap5' ) ].
+				with: [ spec requires: #( 'TvProg3-Core' 'Bootstrap5' ) ].
 
 			spec
 				group: 'Web' with: #( 'TvProg3-Web' );
-				group: 'default' with: 'TvProg3-Core' ]
+				group: 'default' with: 'CAs-TvProg3' ]
 ]
 
 { #category : 'baselines' }
