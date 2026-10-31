@@ -14,7 +14,7 @@ BaselineOfTvProg3 >> baseline: spec [
 
 			spec
 				package: 'TvProg3-Core'
-				with: [ spec requires: #( 'NeoJSON' ) ].
+				with: [ spec requires: #( 'NeoJSON' 'P3'  'Teapot' 'Tealight' 'NeoConsole') ].
 				spec
 				package: 'TvProg3-Web'
 				with: [ spec requires: #('TvProg3-Core' 'Bootstrap5' ) ].
