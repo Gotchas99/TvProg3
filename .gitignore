@@ -19,3 +19,5 @@ PharoDebug.log
 # Metacello-github cache
 /github-cache
 github-*.zip
+
+.env
