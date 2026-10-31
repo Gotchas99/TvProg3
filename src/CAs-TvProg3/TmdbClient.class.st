@@ -10,6 +10,10 @@ Class {
 	#tag : 'API'
 }
 
+{ #category : 'class initialization' }
+TmdbClient class >> initialize [ 
+]
+
 { #category : 'accessing' }
 TmdbClient class >> token [
 

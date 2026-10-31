@@ -13,29 +13,15 @@ BaselineOfTvProg3 >> baseline: spec [
 			self setUpDependencies: spec.
 
 			spec
-				package: 'Teapot-Core' with: [ spec requires: #( 'NeoJSON' ) ];
-				package: 'Teapot-Tools' with: [ spec requires: 'Teapot-Core' ];
-				package: 'Teapot-Tests' with: [ spec requires: 'Teapot-Core' ].
-
-			spec for: (self pharoVersionsFrom: 10) do: [
-					spec
-						package: 'Teapot-Tests'
-						with: [ spec requires: #( 'Zinc-Zodiac' ) ] ].
+				package: 'TvProg3-Core'
+				with: [ spec requires: #( 'NeoJSON' ) ].
+				spec
+				package: 'TvProg3-Web'
+				with: [ spec requires: #('TvProg3-Core' 'Bootstrap5' ) ].
 
 			spec
-				group: 'Tests' with: #( 'Teapot-Tests' );
-				group: 'Tools' with: #( 'Teapot-Tools' );
-				group: 'Deployment' with: #( 'Teapot-Core' );
-				group: 'Development' with: #( 'Tests' 'Tools' );
-				group: 'default' with: 'Development' ]
-]
-
-{ #category : 'baselines' }
-BaselineOfTvProg3 >> pharoVersionsFrom: aVersion [
-	"Method copied from BaselineOf to allow use of Pharo versions < 11"
-
-	^ (aVersion to: SystemVersion current major) collect: [ :v |
-		  ('pharo' , v asString , '.x') asSymbol ]
+				group: 'Web' with: #( 'TvProg3-Web' );
+				group: 'default' with: 'TvProg3-Core' ]
 ]
 
 { #category : 'baselines' }
@@ -46,12 +32,11 @@ BaselineOfTvProg3 >> setUpDependencies: spec [
 				spec
 					repository: 'github://svenvc/NeoJSON';
 					loads: #( 'core' ) ];
-		baseline: 'ZincHTTPComponents'
-		with: [ spec repository: 'github://svenvc/zinc' ];
-		baseline: 'NeoConsole' with: [ "project: 'Zinc-Zodiac'
-		copyFrom: 'ZincHTTPComponents'
-		with: [ spec loads: 'Zinc-Zodiac-Core' ];"
-		spec repository: 'github://svenvc/NeoConsole/src' ];
+		baseline: 'P3' with: [ spec repository: 'github://svenvc/P3' ];
+		baseline: 'Teapot' with: [ spec repository: 'github://zeroflag/Teapot/source' ];
+		baseline: 'Tealight' with: [ spec repository: 'github://astares/Tealight:main/src' ];
+		baseline: 'NeoConsole'
+		with: [ spec repository: 'github://svenvc/NeoConsole/src' ];
 		baseline: 'Bootstrap5'
 		with: [
 		spec repository: 'github://astares/Seaside-Bootstrap5:master/src' ]

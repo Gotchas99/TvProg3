@@ -22,6 +22,12 @@ http://www.omdbapi.com/?i=tt3896198&apikey=xxxxxxxx"
 ApiKey:=aKey 
 ]
 
+{ #category : 'class initialization' }
+OmdbClient class >> initialize [
+
+	
+]
+
 { #category : 'private' }
 OmdbClient >> client [
 "sample call:
