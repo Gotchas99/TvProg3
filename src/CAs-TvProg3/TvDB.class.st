@@ -23,10 +23,7 @@ TvDB class >> default [
 TvDB class >> initialize [
 
 	SessionManager default registerUserClassNamed: self name
-	"SessionManager default unregisterClassNamed:#TuDB.
-	SessionManager default currentSession runList: SessionManager default  startupList.
-	SessionManager default startupList.
-	"
+
 ]
 
 { #category : 'accessing' }

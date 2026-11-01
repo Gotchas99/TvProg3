@@ -60,9 +60,10 @@ TgBot class >> startUp: resuming [
 	"Our system startUp hook: start all servers we manage.
 	We do this using deferred startup actions to allow normal error handling."
 
-	resuming ifTrue: [
+"not ready yet"
+	"resuming ifTrue: [
 			SessionManager default currentSession addDeferredStartupAction: [
-				self startDefault ] ]
+				self startDefault ] ]"
 ]
 
 { #category : 'accessing' }
