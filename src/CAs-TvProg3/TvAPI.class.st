@@ -23,7 +23,8 @@ TvAPI class >> default [
 TvAPI class >> initialize [
 
 	AlwaysRestart := true.
-	SessionManager default registerUserClassNamed: self name
+	SessionManager default registerUserClassNamed: self name.
+	self startUp: true.
 ]
 
 { #category : 'services' }

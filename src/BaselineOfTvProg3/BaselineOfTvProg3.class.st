@@ -9,7 +9,7 @@ Class {
 BaselineOfTvProg3 >> baseline: spec [
 
 	<baseline>
-	spec for: #common do: [
+	spec for: #common do: [ "group: 'Web' with: #( 'TvProg3-Web' );"
 			self setUpDependencies: spec.
 
 			spec
@@ -21,10 +21,8 @@ BaselineOfTvProg3 >> baseline: spec [
 				package: 'TvProg3-Web'
 				with: [ spec requires: #( 'TvProg3-Core' 'Bootstrap5' ) ]."
 
-			spec
-				group: 'default' with: 'CAs-TvProg3' ]
-			
-		"group: 'Web' with: #( 'TvProg3-Web' );"
+			spec group: 'default' with: 'CAs-TvProg3';
+				group: 'deps' with: #( 'NeoJSON' 'P3' 'Teapot' 'Tealight' 'NeoConsole' ) ]
 ]
 
 { #category : 'baselines' }
