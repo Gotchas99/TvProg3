@@ -12,7 +12,8 @@ Class {
 		'seasons',
 		'interest',
 		'viewStatus',
-		'watchProviders'
+		'watchProviders',
+		'comment'
 	],
 	#category : 'CAs-TvProg3-Core',
 	#package : 'CAs-TvProg3',
@@ -53,15 +54,19 @@ TvProgram >> dbData [
 
 	| dict |
 	dict := Dictionary new.
-	dict at:#tmdb_id put: tmdbId .
-	dict at:#imdb_id put: imdbId .
-	dict at:#name put: name .
-	dict at:#type put: type .
-	dict at:#interest put: interest .
-	dict at:#view_status put: viewStatus .
+	dict at: #tmdb_id put: tmdbId.
+	dict at: #imdb_id put: imdbId.
+	dict at: #name put: name.
+	dict at: #type put: type.
+	dict at: #interest put: interest.
+	dict at: #view_status put: viewStatus.
 	dict at: #watch_providers put: ('|' join: watchProviders).
+	dict at:#comment put: comment.
+	
 	dict at: #tmdb_json put: (NeoJSONWriter toStringPretty: tmdbJson).
-	dict at: #tmdb_json_seasons put: (NeoJSONWriter toStringPretty: tmdbJsonSeasons).
+	dict
+		at: #tmdb_json_seasons
+		put: (NeoJSONWriter toStringPretty: tmdbJsonSeasons).
 	dict at: #omdb_json put: (NeoJSONWriter toStringPretty: omdbJson).
 	^ dict
 ]
@@ -98,13 +103,21 @@ TvProgram >> imdbId: aImdbID [
 TvProgram >> initialize [
 
 	seasons := OrderedCollection new.
-	interest:=#new
+	interest := #new.
+	comment:=''.
 ]
 
 { #category : 'accessing' }
 TvProgram >> interest [
 
 	^ interest ifNil:[interest:=#new]
+]
+
+{ #category : 'testing' }
+TvProgram >> isEnded [
+	"Has production ended"
+
+	^ tmdbJson at:#status = 'Ended'
 ]
 
 { #category : 'testing' }
@@ -260,9 +273,9 @@ TvProgram >> type: aType [
 { #category : 'accessing' }
 TvProgram >> viewStatus [
 
-	| allSeen |
+	|  |
 	self flag: 'ska beräknas från säsonger'.
-	(seasons allSatisfy: #isSeen )ifTrue: [^#seen]..
+	self isSeen ifTrue: [ ^ #seen ].
 	^ viewStatus ifNil: [ viewStatus := #new ]
 ]
 

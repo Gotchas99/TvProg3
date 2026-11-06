@@ -113,6 +113,7 @@ TvAPI >> patchSeason: req [
 					           ifTrue: [ 'new' ]
 					           ifFalse: [ doc at: #newStatus ] ].
 	season viewStatus: newSeen.
+	season saveToDb .
 	^ 'ok'
 ]
 

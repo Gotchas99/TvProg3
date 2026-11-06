@@ -120,7 +120,6 @@ TvDB >> db [
 TvDB >> ensureColumn: colName type: colType default: defValue inTable: tblName [
 
 	(self colExists: colName inTable: tblName) ifTrue: [ ^ self ].
-				self flag:#todo.
 	db execute:
 		'ALTER TABLE ' , tblName , ' ADD COLUMN ' , colName , ' ' , colType
 		, ' DEFAULT (' , defValue , ')'
@@ -203,9 +202,11 @@ TvDB >> queueWrite: aMsg [
 { #category : 'schema' }
 TvDB >> setupProgram [
 
-	self createProgram
-	"	self ensureColumn: #tags type: #TEXT inTable: #posts.
-	self
+	| tblName |
+	tblName := #program.
+	self createProgram.
+	self ensureColumn: #comment type: #TEXT inTable: tblName
+	"self
 		ensureColumn: #hidden
 		type: #INTEGER
 		default: 'FALSE'

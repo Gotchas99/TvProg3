@@ -18,3 +18,9 @@ TvConsoleServer >> initializeServerSocket [
 	serverSocket isValid ifFalse: [
 		self error: 'Cannot create socket on port ' , self port printString ]
 ]
+
+{ #category : 'server' }
+TvConsoleServer >> startServer [
+
+	<script:'TvConsoleServer new start'>
+]

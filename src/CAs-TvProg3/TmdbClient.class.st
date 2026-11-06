@@ -36,7 +36,7 @@ TmdbClient >> client [
 ]
 
 { #category : 'as yet unclassified' }
-TmdbClient >> find_by_id: anImdbId [
+TmdbClient >> find_by_id_imdb: anImdbId [
 	"curl --request GET \
      --url 'https://api.themoviedb.org/3/find/external_id?external_source=imdb_id&language=en-US'"
 

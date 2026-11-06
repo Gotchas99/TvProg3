@@ -37,7 +37,7 @@ TvLibrary >> addProgramImdbID: aProgramID [
 	| findRes tc prog |
 self halt.
 	tc := TmdbClient new.
-	findRes := tc find_by_id: aProgramID.
+	findRes := tc find_by_id_imdb: aProgramID.
 	self assert: findRes size = 1.
 	prog := findRes first.
 	self addProgram: prog
@@ -46,11 +46,12 @@ self halt.
 { #category : 'adding' }
 TvLibrary >> addProgramTmdbID: aProgramID [
 
-	| findRes tc prog |
-	tc := TmdbClient new.
-	findRes := tc find_by_id: aProgramID.
-	self assert: findRes size = 1.
-	prog := findRes first.
+	|  prog |
+	prog := TvProgram new.
+prog type:#tv.
+prog tmdbId: aProgramID.
+prog retrieveTmdb .
+prog retrieveOmdb.
 	self addProgram: prog
 ]
 
