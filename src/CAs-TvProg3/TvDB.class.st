@@ -52,19 +52,22 @@ TvDB class >> startUp: resuming [
 
 { #category : 'connection handling' }
 TvDB >> close [
-writeQ ifNotNil:[writeQ flush.writeQ :=nil].
-			db ifNotNil: [
-		writeProcess terminate.
-		db close.
-		"self traceCr: 'db closed'."
-		db := nil ]
+
+	writeQ ifNotNil: [
+			writeQ flush.
+			writeQ := nil ].
+	db ifNotNil: [
+			writeProcess ifNotNil:[ writeProcess isRunning ifTrue:[writeProcess terminate].writeProcess:=nil].
+			db close.
+			"self traceCr: 'db closed'."
+			db := nil ]
 ]
 
 { #category : 'schema-util' }
 TvDB >> colExists: colName inTable: tableName [
 
 	| tbl |
-	tbl := db tables detect: [ :t | t name = tableName ].
+	tbl := self tables detect: [ :t | t name = tableName ].
 	^tbl columnNames includes: colName
 ]
 
@@ -118,11 +121,11 @@ TvDB >> db [
 
 { #category : 'schema-util' }
 TvDB >> ensureColumn: colName type: colType default: defValue inTable: tblName [
+	"(self colExists: colName inTable: tblName) ifTrue: [ ^ self ]."
 
-	(self colExists: colName inTable: tblName) ifTrue: [ ^ self ].
 	db execute:
-		'ALTER TABLE ' , tblName , ' ADD COLUMN ' , colName , ' ' , colType
-		, ' DEFAULT (' , defValue , ')'
+		'ALTER TABLE ' , tblName , ' ADD COLUMN IF NOT EXISTS ' , colName 
+		, ' ' , colType , ' DEFAULT (' , defValue , ')'
 ]
 
 { #category : 'schema-util' }
@@ -260,10 +263,13 @@ tableNames := result data collect: #first.
 	^ tableNames anySatisfy: [ :t | t  = tableName ] 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'schema-util' }
 TvDB >> tables [
 
-	^ db tables 
+	| tbl |
+	tbl:=db query:
+		'SELECT tablename FROM pg_tables WHERE schemaname = ''public'''.
+			^tbl firstColumnData
 ]
 
 { #category : 'operations' }
