@@ -59,10 +59,11 @@ prog retrieveOmdb.
 
 { #category : 'accessing' }
 TvLibrary >> allGenres [
-| allGenres |
-allGenres:=self allPrograms collect:#genres.
-allGenres := allGenres flattened asSet asSortedCollection .
-^allGenres 
+"alla unika genres"
+	| allGenres |
+	allGenres := self allPrograms collect: #genres.
+	allGenres := allGenres flattened asSet asSortedCollection.
+	^ allGenres
 ]
 
 { #category : 'accessing' }
