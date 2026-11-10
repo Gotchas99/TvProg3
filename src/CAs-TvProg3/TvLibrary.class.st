@@ -28,14 +28,16 @@ TvLibrary class >> reset [
 { #category : 'adding' }
 TvLibrary >> addProgram: aProgram [
 
-	(self at: aProgram tmdbId) ifNil: [ programs add: aProgram . self indexSeasons ]
+	(self at: aProgram tmdbId) ifNil: [
+			programs add: aProgram.
+			aProgram saveToDb.
+			self indexSeasons ]
 ]
 
 { #category : 'adding' }
 TvLibrary >> addProgramImdbID: aProgramID [
 
 	| findRes tc prog |
-self halt.
 	tc := TmdbClient new.
 	findRes := tc find_by_id_imdb: aProgramID.
 	self assert: findRes size = 1.

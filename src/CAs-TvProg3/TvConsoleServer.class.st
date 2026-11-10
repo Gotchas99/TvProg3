@@ -24,3 +24,8 @@ TvConsoleServer >> startServer [
 
 	<script:'TvConsoleServer new start'>
 ]
+
+{ #category : 'accessing' }
+TvConsoleServer >> timeout [
+^600
+]
