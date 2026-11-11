@@ -60,9 +60,9 @@ TvProgram >> dbData [
 	dict at: #type put: type.
 	dict at: #interest put: interest.
 	dict at: #view_status put: viewStatus.
-	dict at: #watch_providers put: ('|' join: watchProviders).
-	dict at:#comment put: comment.
-	
+	dict at: #watch_providers put: ('|' join: self watchProviders).
+	dict at: #comment put: comment.
+
 	dict at: #tmdb_json put: (NeoJSONWriter toStringPretty: tmdbJson).
 	dict
 		at: #tmdb_json_seasons
