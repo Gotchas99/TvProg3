@@ -147,7 +147,7 @@ TmdbClient >> unavailable_providers [
 { #category : 'as yet unclassified' }
 TmdbClient >> watch_providers: aTmdbId [
 
-	| cl countries swedish providers names |
+	| cl countries swedish  names flatrate free |
 	cl := self client
 		      addPath: #tv;
 		      addPath: aTmdbId asString;
@@ -155,15 +155,17 @@ TmdbClient >> watch_providers: aTmdbId [
 	cl get.
 	countries := cl contents at: #results.
 	swedish := countries at: #SE.
-	providers := swedish at: #flatrate.
-	names := providers collect: [ :p | p at: #provider_name ].
-	^ names  \ self unavailable_providers 
+	flatrate := swedish at: #flatrate ifAbsent: [ #(  ) ].
+	free := swedish at: #free ifAbsent: [ #(  ) ].
+	names := (flatrate , free) asSet collect: [ :p |
+		         p at: #provider_name ].
+	^ names \ self unavailable_providers
 ]
 
 { #category : 'as yet unclassified' }
 TmdbClient >> watch_providers: aTmdbId season: aSeasonId [
 
-	| cl countries swedish providers names |
+	| cl countries swedish  names flatrate free |
 	cl := self client
 		      addPath: #tv;
 		      addPath: aTmdbId asString;
@@ -173,8 +175,10 @@ TmdbClient >> watch_providers: aTmdbId season: aSeasonId [
 	cl get.
 	countries := cl contents at: #results.
 	swedish := countries at: #SE.
-	swedish ifNil: [ ^ #() ].
-	providers := swedish at: #flatrate.
-	names := providers collect: [ :p | p at: #provider_name ].
+	swedish ifNil: [ ^ #(  ) ].
+		flatrate := swedish at: #flatrate ifAbsent: [ #(  ) ].
+	free := swedish at: #free ifAbsent: [ #(  ) ].
+	names := (flatrate , free) asSet collect: [ :p |
+		         p at: #provider_name ].
 	^ names \ self unavailable_providers
 ]
