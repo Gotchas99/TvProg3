@@ -50,8 +50,8 @@ TvSeason >> dbData [
 	dict at: #tmdb_id put: tmdbId.
 	dict at: #tmdb_json put: (NeoJSONWriter toStringPretty: tmdbJson).
 	dict at: #view_status put: viewStatus.
-	dict at: #watch_providers put: ('|' join: watchProviders).
-	^ dict 
+	dict at: #watch_providers put: ('|' join: self watchProviders).
+	^ dict
 ]
 
 { #category : 'testing' }
