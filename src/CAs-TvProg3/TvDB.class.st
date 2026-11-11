@@ -57,7 +57,7 @@ TvDB >> close [
 			writeQ flush.
 			writeQ := nil ].
 	db ifNotNil: [
-			writeProcess ifNotNil:[ writeProcess isRunning ifTrue:[writeProcess terminate].writeProcess:=nil].
+			writeProcess ifNotNil:[ writeProcess isTerminated ifFalse:[writeProcess terminate].writeProcess:=nil].
 			db close.
 			"self traceCr: 'db closed'."
 			db := nil ]
