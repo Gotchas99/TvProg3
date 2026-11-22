@@ -35,8 +35,10 @@ Default ifNotNil:[self default close.
 { #category : 'class initialization' }
 TvDB class >> shutDown: quitting [
 	"Our system shutDown hook: stop all servers we manage"
- 
-	quitting ifTrue: [ self default close ]
+
+	quitting ifTrue: [
+			self default close.
+			self reset ] 
 ]
 
 { #category : 'class initialization' }
@@ -156,7 +158,7 @@ TvDB >> getWrite [
 
 	| msg |
 	msg := writeQ next.
-	self traceCr: 'get, writeQ: ' , writeQ size asString.
+	"self traceCr: 'get, writeQ: ' , writeQ size asString."
 	msg sendTo: self.
 	^ Processor yield
 ]

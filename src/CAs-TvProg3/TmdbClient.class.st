@@ -141,7 +141,7 @@ TmdbClient >> tv_season: series_id season: aSeasonNo [
 { #category : 'as yet unclassified' }
 TmdbClient >> unavailable_providers [
 
-	^ #( 'Amazon Prime Video' 'Viaplay' )
+	^ #( 'Amazon Prime Video' 'Sky Showtime Amazon Channel' 'HBO Max Amazon Channel' 'Viaplay' )
 ]
 
 { #category : 'as yet unclassified' }
