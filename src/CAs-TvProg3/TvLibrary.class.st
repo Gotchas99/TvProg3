@@ -29,6 +29,7 @@ TvLibrary class >> reset [
 TvLibrary >> addProgram: aProgram [
 
 	(self at: aProgram tmdbId) ifNil: [
+			aProgram retrieveViewability.
 			programs add: aProgram.
 			aProgram saveToDb.
 			self indexSeasons ]
