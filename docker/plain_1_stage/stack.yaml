@@ -1,0 +1,10 @@
+services:
+  app:
+    labels:
+      com.docker.compose.project: ""
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      update_config:
+        order: start-first
