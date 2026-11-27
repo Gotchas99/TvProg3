@@ -1,10 +1,14 @@
 "run.st"
 
+TvConsoleServer new start.
+
+"
 (ZnServer defaultOn: 8080)
   logLevel: 1;
   start.
+"
 
 ZnLogEvent announcer
-  when: ZnLogEvent 
+  when: ZnLogEvent
   do: [ :event | event traceCr ]
   for: ZnServer default.
